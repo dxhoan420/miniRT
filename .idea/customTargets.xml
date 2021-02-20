@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CLionExternalBuildManager">
+    <target id="d0dfc0c2-b6b3-4f68-903d-e866edcf26fa" name="miniRT" defaultType="MAKE">
+      <configuration id="975170f8-3c63-4c3e-8207-81437e429e11" name="miniRT" toolchainName="Default">
+        <build type="MAKE">
+          <make targetName="all" />
+        </build>
+        <clean type="MAKE">
+          <make targetName="clean" />
+        </clean>
+      </configuration>
+    </target>
+  </component>
+</project>
