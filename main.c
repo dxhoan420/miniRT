@@ -23,12 +23,11 @@ int main (int argc, char **argv)
 
 	scene.x_resolution = atoi(argv[1]);
 	scene.y_resolution = atoi(argv[2]);
-	printf("Just add sphere. Now quantity is : %i\n",
-		add_sphere(scene, new_vector(3, 2, -32),
-			 12, 16777215));
-	printf("Just add camera. Now quantity is : %i\n",
-		add_camera(scene, new_vector(0,0,0),
-			 new_vector(0, 0, -1), 70));
+	scene = add_sphere(scene, new_vector(0, 0, -5), 3, 16777215);
+	printf("Just add first sphere.\n");
+	scene = add_camera(scene, new_vector(0,0,0),
+					   new_vector(0, 0, -1), 50);
+	printf("Just add camera.\n");
 
 	printf("Resolution : %d x %s\n", atoi(argv[1]), argv[2]);
 	mlx = mlx_init();

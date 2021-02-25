@@ -4,7 +4,7 @@
 
 #include "../headers/miniRT.h"
 
-int		add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
+t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 {
 	static int result 	= 0;
 	t_spheres *iterator = scene.spheres;
@@ -13,7 +13,7 @@ int		add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 		exit(-1);
 	result++;
 	new->coordinates	= coordinates;
-	new->diameter 		= diameter;
+	new->radius 		= diameter / 2;
 	new->color 			= color;
 	new->next			= NULL;
 	if (iterator != NULL)
@@ -24,26 +24,34 @@ int		add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 	}
 	else
 		scene.spheres = new;
-	return (result);
+	return (scene);
 }
 
 float		distance_to_sphere(struct s_camera camera, t_vector ray,
 		struct s_sphere sphere)
 {
+	float a;
 	float b;
 	float c;
 	float discriminant;
 	float distance;
-	t_vector from_cam_to_sphere;
 
-	from_cam_to_sphere = subtraction_of_vectors(camera.coordinates, sphere
+	t_vector cam_to_center;
+
+	cam_to_center = subtraction_vectors(camera.coordinates, sphere
 			.coordinates);
-	b = 2 * (multiplication_of_vectors(from_cam_to_sphere, ray));
-	c = multiplication_of_vectors(from_cam_to_sphere, from_cam_to_sphere) -
-		(sphere.diameter / 2 * sphere.diameter / 2);
-	discriminant = b * b - 4 * c;
+	a = dot_product_of_vectors(ray, ray);
+	b = 2 * (dot_product_of_vectors(cam_to_center, ray));
+	c = dot_product_of_vectors(cam_to_center, cam_to_center) -
+		(sphere.radius * sphere.radius);
+	discriminant = b * b - 4 * c * a;
 	if (discriminant < 0)
 		return (0);
 	distance = (-b - sqrt(discriminant)) / 2;
-	printf("second distance = : %f", (-b + sqrt(discriminant)) / 2);
+	if (distance < 0)
+		distance = (-b + sqrt(discriminant)) / 2;
+	//printf("first distance	= : %f\n", distance);
+	//printf("second distance	= : %f\n", (-b + sqrt(discriminant)) / 2);
+	//printf("%f %f %f\n", cam_to_center.x, cam_to_center.y, cam_to_center.z);
+	return (distance);
 }

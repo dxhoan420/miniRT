@@ -23,7 +23,7 @@ typedef struct		s_camera
 typedef struct		s_sphere
 {
 	t_vector		coordinates;
-	float			diameter;
+	float			radius;
 	int				color;
 	struct s_sphere	*next;
 }					t_spheres;
@@ -91,11 +91,12 @@ typedef struct		s_all
 	t_spheres		*spheres;
 }					t_all;
 
-int			add_sphere(t_all scene, t_vector coordinates, float diameter,
+t_all		add_sphere(t_all scene, t_vector coordinates, float diameter,
 				 int color);
 float		distance_to_sphere(struct s_camera camera, t_vector ray,
 		struct s_sphere sphere);
-int			add_camera(t_all scene, t_vector coordinates, t_vector norma_vector,
+t_all		add_camera(t_all scene, t_vector coordinates, t_vector
+				norma_vector,
 					  int field_of_view);
 
 
@@ -107,6 +108,7 @@ typedef struct			s_viewport
 	float y_pixel;
 }						t_viewport;
 
-t_viewport	get_viewport(t_all scene);
+t_viewport	get_viewport(int x_resolution, int y_resolution, int fov);
 void		super_ray_tracing(void *mlx, void *window, t_all scene);
+
 #endif //MINIRT_MINIRT_H

@@ -4,7 +4,7 @@
 
 #include "../headers/miniRT.h"
 
-int		add_camera(t_all scene, t_vector coordinates, t_vector norma_vector,
+t_all	add_camera(t_all scene, t_vector coordinates, t_vector norma_vector,
 				int field_of_view)
 {
 	static int result 	= 0;
@@ -25,5 +25,5 @@ int		add_camera(t_all scene, t_vector coordinates, t_vector norma_vector,
 	}
 	else
 		scene.cameras = new;
-	return (result);
+	return (scene);
 }

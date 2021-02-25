@@ -21,12 +21,12 @@ OBJS	= $(SRCS:.c=.o)
 
 LIBS	= -lmlx -framework OpenGL -framework AppKit
 
-CC 		= gcc
-
 all		: $(NAME)
 
+CFLAGS = -Wall -Wextra -Werror -g ## убрать это -gовно
+
 $(NAME)	: $(OBJS) $(HDRS)
-	$(CC) -g -Wall -Wextra -Werror -o $(NAME) $(OBJS) $(LIBS)
+	$(CC) -o $(NAME) $(OBJS) $(LIBS)
 
 clean	:
 	rm -f $(OBJS)
