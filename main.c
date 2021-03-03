@@ -12,6 +12,11 @@
 
 #include "./headers/miniRT.h"
 
+int		create_rgb(int r, int g, int b)
+{
+	return(r << 16 | g << 8 | b);
+}
+
 int main (int argc, char **argv)
 {
 	void    *mlx;
@@ -23,13 +28,13 @@ int main (int argc, char **argv)
 
 	scene.x_resolution = atoi(argv[1]);
 	scene.y_resolution = atoi(argv[2]);
-	scene = add_sphere(scene, new_vector(0, 0, -5), 3, 16777215);
-	printf("Just add first sphere.\n");
-	scene = add_camera(scene, new_vector(0,0,0),
-					   new_vector(0, 0, -1), 50);
-	printf("Just add camera.\n");
+	scene = add_sphere(scene, get_new_vector(1, 1, -5), 1, 16777215);
+	//printf("Just add first sphere.\n");
+	scene = add_camera(scene, get_new_vector(0, 0, 0),
+					   get_new_vector(0, 0, -1), 50);
+	//printf("Just add camera.\n");
 
-	printf("Resolution : %d x %s\n", atoi(argv[1]), argv[2]);
+	//printf("Resolution : %d x %s\n", atoi(argv[1]), argv[2]);
 	mlx = mlx_init();
 	window = mlx_new_window(mlx, scene.x_resolution, scene.y_resolution,
 							"TEST EBAT!11odin");

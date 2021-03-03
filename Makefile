@@ -12,7 +12,7 @@
 
 NAME	= miniRT
 
-SRCS	= main.c $(addprefix scene/, camera.c ray_tracing.c)\
+SRCS	= main.c $(addprefix scene/, camera.c ray_tracing.c parser.c)\
 					$(addprefix geometry/, vector.c sphere.c)
 
 HDRS	= $(addprefix headers/, miniRT.h vector.h ray_tracing.h)

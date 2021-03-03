@@ -6,16 +6,17 @@
 
 t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 {
-	static int result 	= 0;
-	t_spheres *iterator = scene.spheres;
-	t_spheres *new;
-	if (!(new = malloc(sizeof (t_spheres))))
+	t_figures *iterator = scene.figures;
+	struct s_figure *new;
+
+	new = malloc(sizeof (struct s_figure));
+	if (new)
 		exit(-1);
-	result++;
-	new->coordinates	= coordinates;
-	new->radius 		= diameter / 2;
-	new->color 			= color;
-	new->next			= NULL;
+	new->id	= SPHERE;
+	new->first_or_center = coordinates;
+	new->radius_or_size = diameter / 2;
+	new->color = color;
+	new->next = NULL;
 	if (iterator != NULL)
 	{
 		while (iterator->next != NULL)
@@ -23,12 +24,23 @@ t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 		iterator->next = new;
 	}
 	else
-		scene.spheres = new;
+		scene.figures = new;
 	return (scene);
 }
 
+//struct s_sphere *get_closer_sphere(struct s_camera, t_vector ray,
+//		t_spheres *spheres)
+//{
+//	struct s_sphere *closer_one = NULL;
+//	if (spheres != NULL)
+//	{
+//
+//	}
+//	return (closer_one);
+//}
+
 float		distance_to_sphere(struct s_camera camera, t_vector ray,
-		struct s_sphere sphere)
+		struct s_figure sphere)
 {
 	float a;
 	float b;
@@ -38,20 +50,17 @@ float		distance_to_sphere(struct s_camera camera, t_vector ray,
 
 	t_vector cam_to_center;
 
-	cam_to_center = subtraction_vectors(camera.coordinates, sphere
-			.coordinates);
-	a = dot_product_of_vectors(ray, ray);
-	b = 2 * (dot_product_of_vectors(cam_to_center, ray));
-	c = dot_product_of_vectors(cam_to_center, cam_to_center) -
-		(sphere.radius * sphere.radius);
+	cam_to_center = vectors_subtraction(camera.coordinates, sphere
+			.first_or_center);
+	a = vectors_dot_product(ray, ray);
+	b = 2 * (vectors_dot_product(cam_to_center, ray));
+	c = vectors_dot_product(cam_to_center, cam_to_center) -
+		(sphere.radius_or_size * sphere.radius_or_size);
 	discriminant = b * b - 4 * c * a;
 	if (discriminant < 0)
 		return (0);
-	distance = (-b - sqrt(discriminant)) / 2;
+	distance = (-b - sqrtf(discriminant)) / 2;
 	if (distance < 0)
-		distance = (-b + sqrt(discriminant)) / 2;
-	//printf("first distance	= : %f\n", distance);
-	//printf("second distance	= : %f\n", (-b + sqrt(discriminant)) / 2);
-	//printf("%f %f %f\n", cam_to_center.x, cam_to_center.y, cam_to_center.z);
+		distance = (-b + sqrtf(discriminant)) / 2;
 	return (distance);
 }
