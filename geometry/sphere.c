@@ -10,7 +10,7 @@ t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 	struct s_figure *new;
 
 	new = malloc(sizeof (struct s_figure));
-	if (new)
+	if (new == NULL)
 		exit(-1);
 	new->id	= SPHERE;
 	new->first_or_center = coordinates;
@@ -28,19 +28,8 @@ t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 	return (scene);
 }
 
-//struct s_sphere *get_closer_sphere(struct s_camera, t_vector ray,
-//		t_spheres *spheres)
-//{
-//	struct s_sphere *closer_one = NULL;
-//	if (spheres != NULL)
-//	{
-//
-//	}
-//	return (closer_one);
-//}
-
-float		distance_to_sphere(struct s_camera camera, t_vector ray,
-		struct s_figure sphere)
+float		distance_to_sphere(struct s_camera source_of_ray, t_vector ray,
+								struct s_figure sphere)
 {
 	float a;
 	float b;
@@ -50,7 +39,7 @@ float		distance_to_sphere(struct s_camera camera, t_vector ray,
 
 	t_vector cam_to_center;
 
-	cam_to_center = vectors_subtraction(camera.coordinates, sphere
+	cam_to_center = vectors_subtraction(source_of_ray.coordinates, sphere
 			.first_or_center);
 	a = vectors_dot_product(ray, ray);
 	b = 2 * (vectors_dot_product(cam_to_center, ray));
@@ -59,7 +48,8 @@ float		distance_to_sphere(struct s_camera camera, t_vector ray,
 	discriminant = b * b - 4 * c * a;
 	if (discriminant < 0)
 		return (0);
-	distance = (-b - sqrtf(discriminant)) / 2;
+	distance = (-b - sqrtf(discriminant)) / 2; //что тут блять правильно
+	// сделать надо плюс или минус ебать его налево
 	if (distance < 0)
 		distance = (-b + sqrtf(discriminant)) / 2;
 	return (distance);

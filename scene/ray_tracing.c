@@ -4,6 +4,19 @@
 
 #include "../headers/miniRT.h"
 
+t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
+{
+	t_viewport	viewport;
+	float		ratio;
+
+	ratio = (float) x_resolution / (float) y_resolution;
+	viewport.x_size = 2 * tan((float)fov / 2 / 180 * M_PI);
+	viewport.y_size = viewport.x_size / ratio;
+	viewport.x_pixel = viewport.x_size / (float) x_resolution;
+	viewport.y_pixel = viewport.y_size / (float) y_resolution;
+	return (viewport);
+}
+
 struct s_figure		*get_closer_figure(struct s_camera camera,t_vector ray,
 										  t_figures *figures)
 {
@@ -14,19 +27,25 @@ struct s_figure		*get_closer_figure(struct s_camera camera,t_vector ray,
 	while (figures != NULL)
 	{
 		if (figures->id == SPHERE)
-			result = distance_to_sphere(camera, ray, figures);
+			result = distance_to_sphere(camera, ray, *figures);
 		if (result > 0 && result < minimum_positive)
 		{
 			minimum_positive = result;
 			closer_one = figures;
 		}
+		figures = figures->next;
 	}
 	return(closer_one);
 }
 
-int put_color(struct s_camera camera,t_vector ray, t_figures *figures);
+int put_color(struct s_camera camera,t_vector ray, t_figures *figures)
 {
-	get
+	struct s_figure *figure;
+
+	figure = get_closer_figure(camera, ray, figures);
+	if (figure == NULL)
+		return (0);
+	return (figure->color);
 }
 
 void		super_ray_tracing(void *mlx, void *window, t_all scene)
@@ -50,7 +69,7 @@ void		super_ray_tracing(void *mlx, void *window, t_all scene)
 		while (mlx_x_step < scene.x_resolution)
 		{
 			ray = get_new_vector(x_ray, y_ray, -1);
-			printf("%f\t%f\t%f\n", ray.x, ray.y, ray.z);
+			//printf("%f\t%f\t%f\n", ray.x, ray.y, ray.z);
 			mlx_pixel_put(mlx, window, mlx_x_step, mlx_y_step,
 				 put_color(*(scene.cameras), ray, scene.figures));
 			x_ray += viewport.x_pixel;
@@ -65,11 +84,6 @@ void		super_ray_tracing(void *mlx, void *window, t_all scene)
 //				mlx_pixel_put(mlx, window, mlx_x_step, mlx_y_step, scene.spheres->color);
 //			else
 //				mlx_pixel_put(mlx, window, mlx_x_step, mlx_y_step, 0);
-
-
-
-
-
 
 
 //void		new_ray_tracing(void *mlx, void *window, t_all scene)
@@ -105,15 +119,3 @@ void		super_ray_tracing(void *mlx, void *window, t_all scene)
 //	}
 //}
 
-t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
-{
-	t_viewport	viewport;
-	float		ratio;
-
-	ratio = (float) x_resolution / (float) y_resolution;
-	viewport.x_size = 2 * tan((float)fov / 2 / 180 * M_PI);
-	viewport.y_size = viewport.x_size / ratio;
-	viewport.x_pixel = viewport.x_size / (float) x_resolution;
-	viewport.y_pixel = viewport.y_size / (float) y_resolution;
-	return (viewport);
-}
