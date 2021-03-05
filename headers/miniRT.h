@@ -54,8 +54,8 @@ typedef struct		s_all
 {
 	int				x_resolution;
 	int				y_resolution;
-	float			ambient;
-	int				color;
+	float			ambient_ratio;
+	int				ambient_color;
 	t_cameras		*cameras;
 	t_lights		*lights;
 	t_figures		*figures;
@@ -64,7 +64,7 @@ typedef struct		s_all
 
 t_all		add_sphere(t_all scene, t_vector coordinates, float diameter,
 				 int color);
-float		distance_to_sphere(struct s_camera source_of_ray, t_vector ray,
+float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
 								struct s_figure sphere);
 t_all		add_camera(t_all scene, t_vector coordinates, t_vector
 				norma_vector,
@@ -83,5 +83,6 @@ typedef struct			s_viewport
 // fov);
 void				super_ray_tracing(void *mlx, void *window, t_all scene);
 //void				new_ray_tracing(void *mlx, void *window, t_all scene);
+int		create_rgb(int r, int g, int b);
 
 #endif //MINIRT_MINIRT_H

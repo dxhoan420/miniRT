@@ -28,7 +28,7 @@ t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 	return (scene);
 }
 
-float		distance_to_sphere(struct s_camera source_of_ray, t_vector ray,
+float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
 								struct s_figure sphere)
 {
 	float a;
@@ -39,7 +39,7 @@ float		distance_to_sphere(struct s_camera source_of_ray, t_vector ray,
 
 	t_vector cam_to_center;
 
-	cam_to_center = vectors_subtraction(source_of_ray.coordinates, sphere
+	cam_to_center = vectors_subtraction(source_of_ray, sphere
 			.first_or_center);
 	a = vectors_dot_product(ray, ray);
 	b = 2 * (vectors_dot_product(cam_to_center, ray));

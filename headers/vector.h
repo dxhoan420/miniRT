@@ -18,5 +18,6 @@ float		vector_length(t_vector vector);
 t_vector	vector_normalization(t_vector vector);
 float		vectors_dot_product(t_vector first, t_vector second);
 t_vector	vector_multiplying_by_number(t_vector vector, float number);
+t_vector	vectors_cross_product(t_vector first, t_vector second);
 
 #endif //MINIRT_VECTOR_H

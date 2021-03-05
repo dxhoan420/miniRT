@@ -10,14 +10,14 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
 	float		ratio;
 
 	ratio = (float) x_resolution / (float) y_resolution;
-	viewport.x_size = 2 * tan((float)fov / 2 / 180 * M_PI);
+	viewport.x_size = (float)(2 * tan((float)fov / 2 / 180 * M_PI));
 	viewport.y_size = viewport.x_size / ratio;
 	viewport.x_pixel = viewport.x_size / (float) x_resolution;
 	viewport.y_pixel = viewport.y_size / (float) y_resolution;
 	return (viewport);
 }
 
-struct s_figure		*get_closer_figure(struct s_camera camera,t_vector ray,
+struct s_figure		*get_closer_figure(t_vector camera,t_vector ray,
 										  t_figures *figures)
 {
 	struct s_figure *closer_one = NULL;
@@ -38,84 +38,75 @@ struct s_figure		*get_closer_figure(struct s_camera camera,t_vector ray,
 	return(closer_one);
 }
 
-int put_color(struct s_camera camera,t_vector ray, t_figures *figures)
+//we need to divide light_ratio for successful result of cross_product
+int	put_ambient(int figure_color, int light_color, float light_ratio)
+{
+	t_vector	orig;
+	t_vector	lamp;
+	int			r;
+	int 		g;
+	int 		b;
+
+//	r = figure_color >> 16;
+//	g = (figure_color & (0xFF << 8)) >> 8;
+//	b = figure_color & 0xFF;
+
+	orig = get_new_vector((float)(figure_color >> 16),
+						  (float)((figure_color & (0xFF << 8)) >> 8),
+						  (float)(figure_color & 0xFF));
+	lamp = get_new_vector((float)(light_color >> 16),
+						  (float)((light_color & (0xFF << 8)) >> 8),
+						  (float)(light_color & 0xFF));
+	light_ratio /= 255;
+	lamp = vector_multiplying_by_number(lamp, light_ratio);
+	orig = vectors_cross_product(orig, lamp);
+//	r = (int)(light_ratio * orig.x);
+//	if (r > 255)
+//		r = 255;
+//	g = (int)(light_ratio * orig.y);
+//	if (g > 255)
+//		g = 255;
+//	b = (int)(light_ratio * orig.z);
+//	if (g > 255)
+//		g = 255;
+//	return (create_rgb(r, g, b));
+	return (create_rgb((int)orig.x, (int)orig.y, (int)orig.z));
+}
+
+int put_color(t_all scene,t_vector ray)
 {
 	struct s_figure *figure;
 
-	figure = get_closer_figure(camera, ray, figures);
+	figure = get_closer_figure(scene.cameras->coordinates, ray, scene.figures);
 	if (figure == NULL)
 		return (0);
-	return (figure->color);
+	return (put_ambient(figure->color, scene.ambient_color, scene.ambient_ratio));
+	//return (figure->color);
 }
 
 void		super_ray_tracing(void *mlx, void *window, t_all scene)
 {
-	int			mlx_x_step;
-	int 		mlx_y_step;
-	float		x_ray;
-	float		y_ray;
+	int			mlx_x;
+	int 		mlx_y;
 	t_vector	ray;
 	t_viewport	viewport;
 
 	viewport = get_viewport(scene.x_resolution, scene.y_resolution,
 						 scene.cameras->field_of_view);
-	y_ray = (float)scene.y_resolution / 2 * viewport.y_pixel;
-	mlx_y_step = 0;
-	while (mlx_y_step < scene.y_resolution)
+	ray.z = -1;//вот эту хуйню поменять надо!
+	ray.y = (float)scene.y_resolution / 2 * viewport.y_pixel;
+	mlx_y = 0;
+	while (mlx_y < scene.y_resolution)
 	{
-		y_ray -= viewport.y_pixel;
-		x_ray = (-(float)scene.x_resolution / 2) * viewport.x_pixel;
-		mlx_x_step = 0;
-		while (mlx_x_step < scene.x_resolution)
+		ray.x = (-(float)scene.x_resolution / 2) * viewport.x_pixel;
+		mlx_x = 0;
+		while (mlx_x < scene.x_resolution)
 		{
-			ray = get_new_vector(x_ray, y_ray, -1);
-			//printf("%f\t%f\t%f\n", ray.x, ray.y, ray.z);
-			mlx_pixel_put(mlx, window, mlx_x_step, mlx_y_step,
-				 put_color(*(scene.cameras), ray, scene.figures));
-			x_ray += viewport.x_pixel;
-			mlx_x_step++;
+			mlx_pixel_put(mlx, window, mlx_x, mlx_y, put_color(scene, ray));
+			ray.x += viewport.x_pixel;
+			mlx_x++;
 		}
-		printf("\n");
-		mlx_y_step++;
+		ray.y -= viewport.y_pixel;
+		mlx_y++;
 	}
 }
-
-//if (distance_to_sphere(*(scene.cameras), ray, *(scene.spheres)) > 0)
-//				mlx_pixel_put(mlx, window, mlx_x_step, mlx_y_step, scene.spheres->color);
-//			else
-//				mlx_pixel_put(mlx, window, mlx_x_step, mlx_y_step, 0);
-
-
-//void		new_ray_tracing(void *mlx, void *window, t_all scene)
-//{
-//	int			x_res_counter;
-//	float 		x_pixel_count;
-//	t_vector	ray;
-//	t_viewport	viewport;
-//
-//	viewport = get_viewport(scene.x_resolution, scene.y_resolution,
-//							scene.cameras->field_of_view);	//переделать под
-//							// все камеры!!!
-//	while (scene.y_resolution > 0)
-//	{
-//		x_res_counter = scene.x_resolution;
-//		x_pixel_count = viewport.x_size;
-//		while (x_res_counter > 0)
-//		{
-//			ray = get_new_vector(x_pixel_count, viewport.y_size, -1);
-//			printf("%f\t%f\t%f\n", ray.x, ray.y, ray.z);
-//			if (distance_to_sphere(*(scene.cameras), ray, *(scene.spheres)) > 0)
-//				mlx_pixel_put(mlx, window, x_res_counter,
-//				  scene.y_resolution,  scene.spheres->color);
-//			else
-//				mlx_pixel_put(mlx, window, x_res_counter,
-//				  scene.y_resolution, 0);
-//			x_res_counter--;
-//			x_pixel_count -= viewport.x_pixel;
-//		}
-//		printf("\n");
-//		viewport.y_size -= viewport.y_pixel;
-//		scene.y_resolution--;
-//	}
-//}
-

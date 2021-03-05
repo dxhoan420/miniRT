@@ -23,7 +23,7 @@ LIBS	= -lmlx -framework OpenGL -framework AppKit
 
 all		: $(NAME)
 
-CFLAGS = -Wall -Wextra -Werror -g ## убрать это -gовно
+CFLAGS =  -g ## убрать это -gовно добавить это -Wall -Wextra -Werror
 
 $(NAME)	: $(OBJS) $(HDRS)
 	$(CC) -o $(NAME) $(OBJS) $(LIBS)

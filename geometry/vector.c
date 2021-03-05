@@ -61,3 +61,11 @@ t_vector	vector_multiplying_by_number(t_vector vector, float number)
 	vector.z *= number;
 	return (vector);
 }
+
+t_vector	vectors_cross_product(t_vector first, t_vector second)
+{
+	first.x *= second.x;
+	first.y *= second.y;
+	first.z *= second.z;
+	return (first);
+}

@@ -28,20 +28,20 @@ int main (int argc, char **argv)
 
 	scene.x_resolution = atoi(argv[1]);
 	scene.y_resolution = atoi(argv[2]);
-	scene = add_sphere(scene, get_new_vector(0, 0, -3), 1,
-					create_rgb(200,0,0));
-//	scene = add_sphere(scene, get_new_vector(-1, -1, -5), 1,
-//					   create_rgb(0,0,200));
-//	scene = add_sphere(scene, get_new_vector(1, -1, -5), 1,
-//					create_rgb(200,200,0));
-//	scene = add_sphere(scene, get_new_vector(-1, 1, -5), 1,
-//					   create_rgb(0,200,200));
-//	scene = add_sphere(scene, get_new_vector(1, -1, -6), 2,
-//					create_rgb(250,250,250));
-	scene = add_sphere(scene, get_new_vector(0, 0, -2), 4,
-					   create_rgb(250,250,250));
-
-	//printf("Just add first sphere.\n");
+	scene.ambient_ratio = 0.80f;
+	scene.ambient_color = create_rgb(255, 255, 255);
+	scene = add_sphere(scene, get_new_vector(1, 0, -4), 1,
+					create_rgb(255,0,0));
+	scene = add_sphere(scene, get_new_vector(-1, -1, -5), 1,
+					   create_rgb(0,0,255));
+	scene = add_sphere(scene, get_new_vector(1, -1, -5), 1,
+					create_rgb(255,255,0));
+	scene = add_sphere(scene, get_new_vector(-1, 1, -5), 1,
+					   create_rgb(0,255,255));
+	scene = add_sphere(scene, get_new_vector(1, 1, -6), 1,
+					create_rgb(0,250,0));
+	scene = add_sphere(scene, get_new_vector(-1, 0, -5), 1,
+					   create_rgb(255,255,255));
 	scene = add_camera(scene, get_new_vector(0, 0, 0),
 					   get_new_vector(0, 0, -1), 50);
 	//printf("Just add camera.\n");
@@ -58,14 +58,3 @@ int main (int argc, char **argv)
 
 	return (0);
 }
-
-//void init_all (t_all *scene)
-//{
-//	scene->x_resolution		= -1;
-//	scene->y_resolution		= -1;
-//	scene->ambient			= -1;
-//	scene->color			= -1;
-//	scene->cameras			= NULL;
-//	scene->lights			= NULL;
-//	scene->spheres			= NULL;
-//}
