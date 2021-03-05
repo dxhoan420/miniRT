@@ -39,17 +39,10 @@ struct s_figure		*get_closer_figure(t_vector camera,t_vector ray,
 }
 
 //we need to divide light_ratio for successful result of cross_product
-int	put_ambient(int figure_color, int light_color, float light_ratio)
+int	put_light(int figure_color, int light_color, float light_ratio)
 {
 	t_vector	orig;
 	t_vector	lamp;
-	int			r;
-	int 		g;
-	int 		b;
-
-//	r = figure_color >> 16;
-//	g = (figure_color & (0xFF << 8)) >> 8;
-//	b = figure_color & 0xFF;
 
 	orig = get_new_vector((float)(figure_color >> 16),
 						  (float)((figure_color & (0xFF << 8)) >> 8),
@@ -60,18 +53,37 @@ int	put_ambient(int figure_color, int light_color, float light_ratio)
 	light_ratio /= 255;
 	lamp = vector_multiplying_by_number(lamp, light_ratio);
 	orig = vectors_cross_product(orig, lamp);
-//	r = (int)(light_ratio * orig.x);
-//	if (r > 255)
-//		r = 255;
-//	g = (int)(light_ratio * orig.y);
-//	if (g > 255)
-//		g = 255;
-//	b = (int)(light_ratio * orig.z);
-//	if (g > 255)
-//		g = 255;
-//	return (create_rgb(r, g, b));
 	return (create_rgb((int)orig.x, (int)orig.y, (int)orig.z));
 }
+
+//int put_light(int color, struct s_light light)
+//{
+//	int result;
+//
+//	return (result);
+//}
+
+//int put_color(t_all scene,t_vector ray)
+//{
+//	struct s_figure *figure;
+//	int 			result;
+//	struct s_light	*light;
+//	int				color;
+//	float			ratio;
+//
+//	figure = get_closer_figure(scene.cameras->coordinates, ray, scene.figures);
+//	light = scene.lights;
+//	if (figure == NULL)
+//		return (0);
+//	result = put_light(figure->color, scene.ambient_color,
+//					  scene.ambient_ratio);
+//	while (light != NULL)
+//	{
+//		result = put_light(result, *light);
+//		light = light->next;
+//	}
+//	return (result);
+//}
 
 int put_color(t_all scene,t_vector ray)
 {
@@ -80,7 +92,10 @@ int put_color(t_all scene,t_vector ray)
 	figure = get_closer_figure(scene.cameras->coordinates, ray, scene.figures);
 	if (figure == NULL)
 		return (0);
-	return (put_ambient(figure->color, scene.ambient_color, scene.ambient_ratio));
+	return (put_light(figure->color, create_rgb(scene.ambient_r,
+												scene.ambient_g,
+												scene.ambient_b),
+					  scene.ambient_ratio));
 	//return (figure->color);
 }
 

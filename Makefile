@@ -13,9 +13,10 @@
 NAME	= miniRT
 
 SRCS	= main.c $(addprefix scene/, camera.c ray_tracing.c)\
-					$(addprefix geometry/, vector.c sphere.c)
+					$(addprefix geometry/, vector.c sphere.c)\
+					$(addprefix utils/, color.c)
 
-HDRS	= $(addprefix headers/, miniRT.h vector.h)
+HDRS	= $(addprefix headers/, miniRT.h vector.h color.h)
 
 OBJS	= $(SRCS:.c=.o)
 
@@ -23,7 +24,7 @@ LIBS	= -lmlx -framework OpenGL -framework AppKit
 
 all		: $(NAME)
 
-CFLAGS =  -g ## убрать это -gовно добавить это -Wall -Wextra -Werror
+CFLAGS =  -Wall -Wextra -Werror -g ## убрать это -gовно
 
 $(NAME)	: $(OBJS) $(HDRS)
 	$(CC) -o $(NAME) $(OBJS) $(LIBS)

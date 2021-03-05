@@ -11,6 +11,7 @@
 # include <math.h>
 
 # include "vector.h"
+# include "color.h"
 
 typedef enum			e_id
 {
@@ -32,14 +33,14 @@ typedef struct			s_camera
 typedef struct			s_light
 {
 	t_vector		coordinates;
-	float			brightness;
-	int 			color;
+	float			light_ratio;
+	t_color			color;
 	struct s_light	*next;
 }						t_lights;
 
 typedef struct			s_figure
 {
-	int				color;
+	t_color 		color;
 	t_vector		first_or_center;
 	t_vector		second_or_norma;
 	t_vector		third;
@@ -55,7 +56,7 @@ typedef struct		s_all
 	int				x_resolution;
 	int				y_resolution;
 	float			ambient_ratio;
-	int				ambient_color;
+	t_color			color;
 	t_cameras		*cameras;
 	t_lights		*lights;
 	t_figures		*figures;
@@ -67,9 +68,9 @@ t_all		add_sphere(t_all scene, t_vector coordinates, float diameter,
 float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
 								struct s_figure sphere);
 t_all		add_camera(t_all scene, t_vector coordinates, t_vector
-				norma_vector,
-					  int field_of_view);
-
+				norma_vector, int field_of_view);
+t_all		add_light(t_all scene, t_vector coordinates, float light_ratio,
+				   int light_color);
 
 typedef struct			s_viewport
 {
@@ -79,10 +80,6 @@ typedef struct			s_viewport
 	float y_pixel;
 }						t_viewport;
 
-//t_viewport			get_viewport(int x_resolution, int y_resolution, int
-// fov);
-void				super_ray_tracing(void *mlx, void *window, t_all scene);
-//void				new_ray_tracing(void *mlx, void *window, t_all scene);
-int		create_rgb(int r, int g, int b);
+void		super_ray_tracing(void *mlx, void *window, t_all scene);
 
 #endif //MINIRT_MINIRT_H

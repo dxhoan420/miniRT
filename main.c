@@ -12,11 +12,6 @@
 
 #include "./headers/miniRT.h"
 
-int		create_rgb(int r, int g, int b)
-{
-	return(r << 16 | g << 8 | b);
-}
-
 int main (int argc, char **argv)
 {
 	void    *mlx;
@@ -28,8 +23,10 @@ int main (int argc, char **argv)
 
 	scene.x_resolution = atoi(argv[1]);
 	scene.y_resolution = atoi(argv[2]);
-	scene.ambient_ratio = 0.80f;
-	scene.ambient_color = create_rgb(255, 255, 255);
+	scene.ambient_ratio = 0.9999f;
+	scene.color = color_to_rgb();
+	scene.ambient_g = 255;
+	scene.ambient_b = 255;
 	scene = add_sphere(scene, get_new_vector(1, 0, -4), 1,
 					create_rgb(255,0,0));
 	scene = add_sphere(scene, get_new_vector(-1, -1, -5), 1,
@@ -37,22 +34,18 @@ int main (int argc, char **argv)
 	scene = add_sphere(scene, get_new_vector(1, -1, -5), 1,
 					create_rgb(255,255,0));
 	scene = add_sphere(scene, get_new_vector(-1, 1, -5), 1,
-					   create_rgb(0,255,255));
+					   create_rgb(255,0,253));
 	scene = add_sphere(scene, get_new_vector(1, 1, -6), 1,
 					create_rgb(0,250,0));
 	scene = add_sphere(scene, get_new_vector(-1, 0, -5), 1,
 					   create_rgb(255,255,255));
 	scene = add_camera(scene, get_new_vector(0, 0, 0),
 					   get_new_vector(0, 0, -1), 50);
-	//printf("Just add camera.\n");
-
-	//printf("Resolution : %d x %s\n", atoi(argv[1]), argv[2]);
+	scene = add_light(scene, get_new_vector(2, 2, 2), 0.999f,
+				   create_rgb(255,255,255));
 	mlx = mlx_init();
 	window = mlx_new_window(mlx, scene.x_resolution, scene.y_resolution,
 							"TEST EBAT!11odin");
-//	for (int i = 100; i < 300; i++)
-//		for (int j = 100; j < 150; j++)
-//			mlx_pixel_put(mlx, window, i, j, 16777215);
 	super_ray_tracing(mlx, window, scene);
 	mlx_loop(mlx);
 
