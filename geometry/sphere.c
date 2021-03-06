@@ -4,7 +4,7 @@
 
 #include "../headers/miniRT.h"
 
-t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
+t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, t_rgb rgb)
 {
 	t_figures *iterator = scene.figures;
 	struct s_figure *new;
@@ -15,9 +15,7 @@ t_all	add_sphere(t_all scene, t_vector coordinates, float diameter, int color)
 	new->id	= SPHERE;
 	new->first_or_center = coordinates;
 	new->radius_or_size = diameter / 2;
-	new->color_r = color >> 16;
-	new->color_g = (color & (0xFF << 8)) >> 8;
-	new->color_b = color & 0xFF;
+	new->rgb = rgb;
 	new->next = NULL;
 	if (iterator != NULL)
 	{

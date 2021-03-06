@@ -26,8 +26,7 @@ t_all	add_camera(t_all scene, t_vector coordinates, t_vector norma_vector,
 	return (scene);
 }
 
-t_all	add_light(t_all scene, t_vector coordinates, float light_ratio,
-				int light_color)
+t_all	add_light(t_all scene, t_vector coordinates, t_rgb rgb_norm)
 {
 	t_lights *iterator = scene.lights;
 	struct s_light *new;
@@ -36,8 +35,7 @@ t_all	add_light(t_all scene, t_vector coordinates, float light_ratio,
 	if (new == NULL)
 		exit(-1);
 	new->coordinates = coordinates;
-	new->light_ratio = light_ratio;
-	new->light_color = light_color;
+	new->rgb_norm = rgb_norm;
 	new->next = NULL;
 	if (iterator != NULL)
 	{

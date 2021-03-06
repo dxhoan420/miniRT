@@ -12,7 +12,7 @@ typedef struct 	s_vector
 	float z;
 }				t_vector;
 
-t_vector	get_new_vector(float x, float y, float z);
+t_vector	create_vector(float x, float y, float z);
 t_vector	vectors_subtraction(t_vector subtract_from, t_vector to_subtract);
 float		vector_length(t_vector vector);
 t_vector	vector_normalization(t_vector vector);

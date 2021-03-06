@@ -34,13 +34,13 @@ typedef struct			s_light
 {
 	t_vector		coordinates;
 	float			light_ratio;
-	t_color			color;
+	t_rgb			rgb_norm;
 	struct s_light	*next;
 }						t_lights;
 
 typedef struct			s_figure
 {
-	t_color 		color;
+	t_rgb 			rgb;
 	t_vector		first_or_center;
 	t_vector		second_or_norma;
 	t_vector		third;
@@ -55,8 +55,7 @@ typedef struct		s_all
 {
 	int				x_resolution;
 	int				y_resolution;
-	float			ambient_ratio;
-	t_color			color;
+	t_rgb			ambient_rgb_norm;
 	t_cameras		*cameras;
 	t_lights		*lights;
 	t_figures		*figures;
@@ -64,13 +63,12 @@ typedef struct		s_all
 
 
 t_all		add_sphere(t_all scene, t_vector coordinates, float diameter,
-				 int color);
+				 t_rgb rgb);
 float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
 								struct s_figure sphere);
 t_all		add_camera(t_all scene, t_vector coordinates, t_vector
 				norma_vector, int field_of_view);
-t_all		add_light(t_all scene, t_vector coordinates, float light_ratio,
-				   int light_color);
+t_all		add_light(t_all scene, t_vector coordinates, t_rgb rgb);
 
 typedef struct			s_viewport
 {

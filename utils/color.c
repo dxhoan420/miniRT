@@ -4,31 +4,46 @@
 
 #include "../headers/color.h"
 
-int		r_g_b_to_color(int r, int g, int b)
+t_rgb create_rgb_norm(float r, float g, float b, float ratio)
 {
-	return(r << 16 | g << 8 | b);
-}
+	t_rgb rgb;
 
-int 	rgb_to_color(t_color rgb)
-{
-	return(rgb.r << 16 | rgb.g << 8 | rgb.b);
-}
-
-t_color	color_to_rgb(int color)
-{
-	t_color rgb;
-
-	rgb.r = color >> 16;
-	rgb.g = (color & (0xFF << 8)) >> 8;
-	rgb.b = color & 0xFF;
+	rgb.r = ratio / 255 * r;
+	rgb.g = ratio / 255 * g;
+	rgb.b = ratio / 255 * b;
 	return (rgb);
 }
 
-t_color r_g_b_to_rgb(int r, int g, int b)
+t_rgb create_rgb(float r, float g, float b)
 {
-	t_color rgb;
+	t_rgb rgb;
 
 	rgb.r = r;
 	rgb.g = g;
 	rgb.b = b;
+	return (rgb);
+}
+
+t_rgb rgbs_adding(t_rgb add_here, t_rgb add_this)
+{
+	add_here.r += add_this.r;
+	add_here.g += add_this.g;
+	add_here.b += add_this.b;
+	return (add_here);
+}
+
+t_rgb rgb_dividing(t_rgb for_division, float divider)
+{
+	for_division.r /= divider;
+	for_division.g /= divider;
+	for_division.b /= divider;
+	return (for_division);
+}
+
+t_rgb rgb_multiplying(t_rgb for_multiply, float factor)
+{
+	for_multiply.r *= factor;
+	for_multiply.g *= factor;
+	for_multiply.b *= factor;
+	return (for_multiply);
 }

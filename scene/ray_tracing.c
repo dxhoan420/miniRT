@@ -38,65 +38,37 @@ struct s_figure		*get_closer_figure(t_vector camera,t_vector ray,
 	return(closer_one);
 }
 
-//we need to divide light_ratio for successful result of cross_product
-int	put_light(int figure_color, int light_color, float light_ratio)
+int	create_color(t_rgb orig, t_rgb light)
 {
-	t_vector	orig;
-	t_vector	lamp;
-
-	orig = get_new_vector((float)(figure_color >> 16),
-						  (float)((figure_color & (0xFF << 8)) >> 8),
-						  (float)(figure_color & 0xFF));
-	lamp = get_new_vector((float)(light_color >> 16),
-						  (float)((light_color & (0xFF << 8)) >> 8),
-						  (float)(light_color & 0xFF));
-	light_ratio /= 255;
-	lamp = vector_multiplying_by_number(lamp, light_ratio);
-	orig = vectors_cross_product(orig, lamp);
-	return (create_rgb((int)orig.x, (int)orig.y, (int)orig.z));
+	orig.r *= light.r;
+	orig.g *= light.g;
+	orig.b *= light.b;
+	return ((int)orig.r << 16 | (int)orig.g << 8 | (int)orig.b);
 }
-
-//int put_light(int color, struct s_light light)
-//{
-//	int result;
-//
-//	return (result);
-//}
-
-//int put_color(t_all scene,t_vector ray)
-//{
-//	struct s_figure *figure;
-//	int 			result;
-//	struct s_light	*light;
-//	int				color;
-//	float			ratio;
-//
-//	figure = get_closer_figure(scene.cameras->coordinates, ray, scene.figures);
-//	light = scene.lights;
-//	if (figure == NULL)
-//		return (0);
-//	result = put_light(figure->color, scene.ambient_color,
-//					  scene.ambient_ratio);
-//	while (light != NULL)
-//	{
-//		result = put_light(result, *light);
-//		light = light->next;
-//	}
-//	return (result);
-//}
 
 int put_color(t_all scene,t_vector ray)
 {
 	struct s_figure *figure;
+	t_rgb			result;
+	float			lights_quantity;
+	struct s_light	*light;
 
 	figure = get_closer_figure(scene.cameras->coordinates, ray, scene.figures);
 	if (figure == NULL)
 		return (0);
-	return (put_light(figure->color, create_rgb(scene.ambient_r,
-												scene.ambient_g,
-												scene.ambient_b),
-					  scene.ambient_ratio));
-	//return (figure->color);
+	result = rgb_multiplying(scene.ambient_rgb_norm, 1);//добавить
+	// умножение на интенсивность от нормали
+	lights_quantity = 1;
+	light = scene.lights;
+	while (light != NULL)
+	{
+		lights_quantity++;
+		if (1)//добавить условие на тень
+			result = rgbs_adding(result, rgb_multiplying(light->rgb_norm, 1));
+			//добавить умножение на интенсивность от нормали
+		light = light->next;
+	}
+	return (create_color(figure->rgb, rgb_dividing(result, lights_quantity)));
 }
 
 void		super_ray_tracing(void *mlx, void *window, t_all scene)

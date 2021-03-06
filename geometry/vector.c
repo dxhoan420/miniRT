@@ -4,7 +4,7 @@
 
 #include "../headers/miniRT.h"
 
-t_vector	get_new_vector(float x, float y, float z)
+t_vector	create_vector(float x, float y, float z)
 {
 	t_vector	vector;
 	vector.x = x;
@@ -60,12 +60,4 @@ t_vector	vector_multiplying_by_number(t_vector vector, float number)
 	vector.y *= number;
 	vector.z *= number;
 	return (vector);
-}
-
-t_vector	vectors_cross_product(t_vector first, t_vector second)
-{
-	first.x *= second.x;
-	first.y *= second.y;
-	first.z *= second.z;
-	return (first);
 }
