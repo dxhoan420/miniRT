@@ -17,25 +17,26 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
 	return (viewport);
 }
 
-struct s_figure		*get_closer_figure(t_vector camera,t_vector ray,
-										  t_figures *figures)
+float		get_closer_figure_distance(t_vector camera, t_vector ray,
+										t_figures *figures, struct s_figure **result)
 {
 	struct s_figure *closer_one = NULL;
 	float 			minimum_positive = 3.402823466e38f;
-	float			result;
+	float			distance;
 
 	while (figures != NULL)
 	{
 		if (figures->id == SPHERE)
-			result = distance_to_sphere(camera, ray, *figures);
-		if (result > 0 && result < minimum_positive)
+			distance = distance_to_sphere(camera, ray, *figures);
+		if (distance > 0 && distance < minimum_positive)
 		{
-			minimum_positive = result;
+			minimum_positive = distance;
 			closer_one = figures;
 		}
 		figures = figures->next;
 	}
-	return(closer_one);
+	*result = closer_one;
+	return(minimum_positive);
 }
 
 int	create_color(t_rgb orig, t_rgb light)
@@ -52,23 +53,35 @@ int put_color(t_all scene,t_vector ray)
 	t_rgb			result;
 	float			lights_quantity;
 	struct s_light	*light;
+	float			distance;
 
-	figure = get_closer_figure(scene.cameras->coordinates, ray, scene.figures);
+	distance = get_closer_figure_distance(scene.cameras->coordinates, ray,
+										  scene.figures, &figure);
 	if (figure == NULL)
 		return (0);
-	result = rgb_multiplying(scene.ambient_rgb_norm, 1);//добавить
-	// умножение на интенсивность от нормали
+	result = scene.ambient_rgb_norm;
 	lights_quantity = 1;
 	light = scene.lights;
 	while (light != NULL)
 	{
 		lights_quantity++;
 		if (1)//добавить условие на тень
-			result = rgbs_adding(result, rgb_multiplying(light->rgb_norm, 1));
-			//добавить умножение на интенсивность от нормали
+		{
+			t_vector vector_distance = vector_multiplication_by_number(ray,
+															  distance);
+			t_vector crossing = vectors_addition(scene.cameras->coordinates,
+										vector_distance);
+			t_vector norm = vector_normalization(vectors_subtraction
+					(crossing, figure->first_or_center));
+			float ratio = vectors_dot_product(norm, light->coordinates) /
+					(vector_length(norm) * vector_length(light->coordinates));
+			result = rgbs_addition(result,
+								   rgb_multiplication(light->rgb_norm, ratio));
+			//пиздец как теперь всё это спрятать нахуй.....
+		}
 		light = light->next;
 	}
-	return (create_color(figure->rgb, rgb_dividing(result, lights_quantity)));
+	return (create_color(figure->rgb, rgb_division(result, lights_quantity)));
 }
 
 void		super_ray_tracing(void *mlx, void *window, t_all scene)

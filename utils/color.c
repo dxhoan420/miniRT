@@ -24,7 +24,7 @@ t_rgb create_rgb(float r, float g, float b)
 	return (rgb);
 }
 
-t_rgb rgbs_adding(t_rgb add_here, t_rgb add_this)
+t_rgb rgbs_addition(t_rgb add_here, t_rgb add_this)
 {
 	add_here.r += add_this.r;
 	add_here.g += add_this.g;
@@ -32,7 +32,7 @@ t_rgb rgbs_adding(t_rgb add_here, t_rgb add_this)
 	return (add_here);
 }
 
-t_rgb rgb_dividing(t_rgb for_division, float divider)
+t_rgb rgb_division(t_rgb for_division, float divider)
 {
 	for_division.r /= divider;
 	for_division.g /= divider;
@@ -40,7 +40,7 @@ t_rgb rgb_dividing(t_rgb for_division, float divider)
 	return (for_division);
 }
 
-t_rgb rgb_multiplying(t_rgb for_multiply, float factor)
+t_rgb rgb_multiplication(t_rgb for_multiply, float factor)
 {
 	for_multiply.r *= factor;
 	for_multiply.g *= factor;

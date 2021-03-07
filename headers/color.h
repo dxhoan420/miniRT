@@ -18,8 +18,8 @@ typedef struct	s_rgb
 }				t_rgb;
 
 t_rgb			create_rgb_norm(float r, float g, float b, float ratio);
-t_rgb			rgb_multiplying(t_rgb for_multiply, float factor);
-t_rgb			rgb_dividing(t_rgb for_division, float divider);
-t_rgb			rgbs_adding(t_rgb add_here, t_rgb add_this);
+t_rgb			rgb_multiplication(t_rgb for_multiply, float factor);
+t_rgb			rgb_division(t_rgb for_division, float divider);
+t_rgb			rgbs_addition(t_rgb add_here, t_rgb add_this);
 t_rgb			create_rgb(float r, float g, float b);
 #endif //MINIRT_COLOR_H

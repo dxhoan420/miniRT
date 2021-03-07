@@ -54,10 +54,18 @@ float		vectors_dot_product(t_vector first, t_vector second)
 	return (result);
 }
 
-t_vector	vector_multiplying_by_number(t_vector vector, float number)
+t_vector	vector_multiplication_by_number(t_vector vector, float number)
 {
 	vector.x *= number;
 	vector.y *= number;
 	vector.z *= number;
 	return (vector);
+}
+
+t_vector	vectors_addition(t_vector add_here, t_vector add_this)
+{
+	add_here.x += add_this.x;
+	add_here.y += add_this.y;
+	add_here.z += add_this.z;
+	return (add_here);
 }
