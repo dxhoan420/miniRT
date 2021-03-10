@@ -17,8 +17,8 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
 	return (viewport);
 }
 
-float		get_closer_figure_distance(t_vector camera, t_vector ray,
-										t_figures *figures, struct s_figure **result)
+struct s_figure		*get_closer_figure(t_vector camera, t_vector ray,
+										  t_figures *figures)
 {
 	struct s_figure *closer_one = NULL;
 	float 			minimum_positive = 3.402823466e38f;
@@ -35,8 +35,9 @@ float		get_closer_figure_distance(t_vector camera, t_vector ray,
 		}
 		figures = figures->next;
 	}
-	*result = closer_one;
-	return(minimum_positive);
+	if (closer_one != NULL)
+		closer_one->distance = minimum_positive;
+	return(closer_one);
 }
 
 int	create_color(t_rgb orig, t_rgb light)
@@ -47,16 +48,52 @@ int	create_color(t_rgb orig, t_rgb light)
 	return ((int)orig.r << 16 | (int)orig.g << 8 | (int)orig.b);
 }
 
+typedef struct		s_ray_light_cam_color
+{
+	t_vector		ray;
+	struct s_light	light;
+	t_vector		cam;
+	t_rgb			color;
+}					t_ray_light_color;
+
+t_ray_light_color make_shit(t_vector ray, struct s_light light, t_vector cam,
+							t_rgb color)
+{
+	t_ray_light_color new_shit;
+	new_shit.ray = ray;
+	new_shit.light = light;
+	new_shit.cam = cam;
+	new_shit.color = color;
+	return (new_shit);
+}
+
+t_rgb		count_sphere_color(struct s_figure figure, t_ray_light_color shit)
+{
+	t_vector vector_distance;
+	t_vector crossing;
+	t_vector norm;
+	float ratio;
+
+	vector_distance = vector_multiply_by_number(shit.ray, figure.distance);
+	crossing = vectors_addition(shit.cam, vector_distance);
+	norm = vector_norm(vectors_subtraction(crossing, figure.first_or_center));
+	ratio = vectors_dot_product(norm, shit.light.coordinates) /
+		(vector_length(norm)* vector_length(shit.light.coordinates));
+	if (ratio > 0)
+		return (rgbs_addition(shit.color,
+						rgb_multiplication(shit.light.rgb_norm, ratio)));
+	else
+		return (shit.color);
+}
+
 int put_color(t_all scene,t_vector ray)
 {
 	struct s_figure *figure;
 	t_rgb			result;
 	float			lights_quantity;
 	struct s_light	*light;
-	float			distance;
 
-	distance = get_closer_figure_distance(scene.cameras->coordinates, ray,
-										  scene.figures, &figure);
+	figure = get_closer_figure(scene.cameras->coordinates, ray, scene.figures);
 	if (figure == NULL)
 		return (0);
 	result = scene.ambient_rgb_norm;
@@ -66,19 +103,8 @@ int put_color(t_all scene,t_vector ray)
 	{
 		lights_quantity++;
 		if (1)//добавить условие на тень
-		{
-			t_vector vector_distance = vector_multiplication_by_number(ray,
-															  distance);
-			t_vector crossing = vectors_addition(scene.cameras->coordinates,
-										vector_distance);
-			t_vector norm = vector_normalization(vectors_subtraction
-					(crossing, figure->first_or_center));
-			float ratio = vectors_dot_product(norm, light->coordinates) /
-					(vector_length(norm) * vector_length(light->coordinates));
-			result = rgbs_addition(result,
-								   rgb_multiplication(light->rgb_norm, ratio));
-			//пиздец как теперь всё это спрятать нахуй.....
-		}
+			result = count_sphere_color(*figure, make_shit(ray, *light, scene
+			.cameras->coordinates, result));
 		light = light->next;
 	}
 	return (create_color(figure->rgb, rgb_division(result, lights_quantity)));

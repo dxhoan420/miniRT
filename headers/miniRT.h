@@ -46,6 +46,7 @@ typedef struct			s_figure
 	t_vector		third;
 	float			radius_or_size;
 	float			height;
+	float			distance;
 	t_id 			id;
 
 	struct s_figure	*next;
@@ -62,8 +63,9 @@ typedef struct		s_all
 }					t_all;
 
 
-t_all		add_sphere(t_all scene, t_vector coordinates, float diameter,
-				 t_rgb rgb);
+void		add_sphere(t_all *scene, t_vector center, float diameter,
+					   t_rgb rgb);
+void		add_plane();
 float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
 								struct s_figure sphere);
 t_all		add_camera(t_all scene, t_vector coordinates, t_vector

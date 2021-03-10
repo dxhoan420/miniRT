@@ -33,7 +33,7 @@ float		vector_length(t_vector vector)
 				  vector.z * vector.z	));
 }
 
-t_vector	vector_normalization(t_vector vector)
+t_vector	vector_norm(t_vector vector)
 {
 	float	length;
 
@@ -54,7 +54,7 @@ float		vectors_dot_product(t_vector first, t_vector second)
 	return (result);
 }
 
-t_vector	vector_multiplication_by_number(t_vector vector, float number)
+t_vector	vector_multiply_by_number(t_vector vector, float number)
 {
 	vector.x *= number;
 	vector.y *= number;
