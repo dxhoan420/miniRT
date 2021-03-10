@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./headers/miniRT.h"
+#include "./hdrs/miniRT.h"
 
 int main (int argc, char **argv)
 {

@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 2/24/21.
 //
 
-#include "../headers/miniRT.h"
+#include "../hdrs/miniRT.h"
 
 t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
 {

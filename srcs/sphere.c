@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 2/20/21.
 //
 
-#include "../headers/miniRT.h"
+#include "../hdrs/miniRT.h"
 
 void	add_sphere(t_all *scene, t_vector center, float diameter, t_rgb rgb)
 {

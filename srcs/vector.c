@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 2/24/21.
 //
 
-#include "../headers/miniRT.h"
+#include "../hdrs/miniRT.h"
 
 t_vector	create_vector(float x, float y, float z)
 {

@@ -12,11 +12,9 @@
 
 NAME	= miniRT
 
-SRCS	= main.c $(addprefix scene/, camera.c ray_tracing.c)\
-					$(addprefix geometry/, vector.c sphere.c plane.c)\
-					$(addprefix utils/, color.c parser.c)
+SRCS	= main.c $(addprefix srcs/, camera.c ray_tracing.c vector.c sphere.c plane.c color.c)\
 
-HDRS	= $(addprefix headers/, miniRT.h vector.h color.h parser.h)
+HDRS	= $(addprefix hdrs/, miniRT.h vector.h color.h)
 
 OBJS	= $(SRCS:.c=.o)
 

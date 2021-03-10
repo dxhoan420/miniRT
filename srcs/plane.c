@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/10/21.
 //
 
-#include "../headers/miniRT.h"
+#include "../hdrs/miniRT.h"
 
 void	add_plane(t_all *scene, t_vector coordinates, t_vector norm, t_rgb rgb)
 {

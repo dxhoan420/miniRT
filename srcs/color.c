@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/5/21.
 //
 
-#include "../headers/color.h"
+#include "../hdrs/color.h"
 
 t_rgb create_rgb_norm(float r, float g, float b, float ratio)
 {

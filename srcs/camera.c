@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 2/20/21.
 //
 
-#include "../headers/miniRT.h"
+#include "../hdrs/miniRT.h"
 
 t_all	add_camera(t_all scene, t_vector coordinates, t_vector norma_vector,
 				int field_of_view)
