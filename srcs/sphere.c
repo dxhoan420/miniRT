@@ -27,8 +27,7 @@ void	add_sphere(t_all *scene, t_vector center, float diameter, t_rgb rgb)
 		scene->figures = new;
 }
 
-float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
-								struct s_figure sphere)
+float		distance_to_sphere(t_ray ray, struct s_figure sphere)
 {
 	float a;
 	float b;
@@ -38,10 +37,10 @@ float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
 
 	t_vector cam_to_center;
 
-	cam_to_center = vectors_subtraction(source_of_ray, sphere
+	cam_to_center = vectors_subtraction(ray.src, sphere
 			.first_or_center);
-	a = vectors_dot_product(ray, ray);
-	b = 2 * (vectors_dot_product(cam_to_center, ray));
+	a = vectors_dot_product(ray.dir, ray.dir);
+	b = 2 * (vectors_dot_product(cam_to_center, ray.dir));
 	c = vectors_dot_product(cam_to_center, cam_to_center) -
 		(sphere.radius_or_size * sphere.radius_or_size);
 	discriminant = b * b - 4 * c * a;

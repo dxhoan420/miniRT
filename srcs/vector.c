@@ -13,10 +13,14 @@ t_vector	create_vector(float x, float y, float z)
 	return (vector);
 }
 
-/*
-** Maybe should not use pointer of vector?
-** and return the value...
-*/
+t_ray 		create_ray(t_vector ray, t_vector camera_coordinates)
+{
+	t_ray new_ray;
+
+	new_ray.src = camera_coordinates;
+	new_ray.dir = ray;
+	return (new_ray);
+}
 
 t_vector	vectors_subtraction(t_vector subtract_from, t_vector to_subtract)
 {

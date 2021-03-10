@@ -9,6 +9,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
+# include <float.h>
 
 # include "vector.h"
 # include "color.h"
@@ -66,8 +67,7 @@ typedef struct		s_all
 void		add_sphere(t_all *scene, t_vector center, float diameter,
 					   t_rgb rgb);
 void		add_plane();
-float		distance_to_sphere(t_vector source_of_ray, t_vector ray,
-								struct s_figure sphere);
+float		distance_to_sphere(t_ray ray, struct s_figure sphere);
 t_all		add_camera(t_all scene, t_vector coordinates, t_vector
 				norma_vector, int field_of_view);
 t_all		add_light(t_all scene, t_vector coordinates, t_rgb rgb);

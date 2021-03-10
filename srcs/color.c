@@ -40,10 +40,18 @@ t_rgb rgb_division(t_rgb for_division, float divider)
 	return (for_division);
 }
 
-t_rgb rgb_multiplication(t_rgb for_multiply, float factor)
+t_rgb rgb_multiply(t_rgb for_multiply, float factor)
 {
 	for_multiply.r *= factor;
 	for_multiply.g *= factor;
 	for_multiply.b *= factor;
 	return (for_multiply);
+}
+
+int	create_color(t_rgb orig, t_rgb light)
+{
+	orig.r *= light.r;
+	orig.g *= light.g;
+	orig.b *= light.b;
+	return ((int)orig.r << 16 | (int)orig.g << 8 | (int)orig.b);
 }
