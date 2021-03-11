@@ -14,6 +14,7 @@
 # include "vector.h"
 # include "color.h"
 
+# define SHININESS 10
 typedef enum			e_id
 {
 	SPHERE,

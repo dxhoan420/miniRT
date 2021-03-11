@@ -23,12 +23,18 @@ t_rgb create_rgb(float r, float g, float b)
 	rgb.b = b;
 	return (rgb);
 }
-
+#include <stdio.h>
 t_rgb rgbs_addition(t_rgb add_here, t_rgb add_this)
 {
 	add_here.r += add_this.r;
+	if (add_here.r > 1)
+		add_here.r = 1;
 	add_here.g += add_this.g;
+	if (add_here.g > 1)
+		add_here.g = 1;
 	add_here.b += add_this.b;
+	if (add_here.b > 1)
+		add_here.b = 1;
 	return (add_here);
 }
 
