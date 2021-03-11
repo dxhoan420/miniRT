@@ -34,7 +34,7 @@ t_all	add_light(t_all scene, t_vector coordinates, t_rgb rgb_norm)
 	new = malloc(sizeof(struct s_light));
 	if (new == NULL)
 		exit(-1);
-	new->coordinates = coordinates;
+	new->src = coordinates;
 	new->rgb_norm = rgb_norm;
 	new->next = NULL;
 	if (iterator != NULL)

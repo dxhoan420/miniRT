@@ -37,11 +37,11 @@ float		distance_to_sphere(t_ray ray, struct s_figure sphere)
 
 	t_vector cam_to_center;
 
-	cam_to_center = vectors_subtraction(ray.src, sphere
+	cam_to_center = vecs_subtraction(ray.src, sphere
 			.first_or_center);
-	a = vectors_dot_product(ray.dir, ray.dir);
-	b = 2 * (vectors_dot_product(cam_to_center, ray.dir));
-	c = vectors_dot_product(cam_to_center, cam_to_center) -
+	a = vecs_dot_product(ray.dir, ray.dir);
+	b = 2 * (vecs_dot_product(cam_to_center, ray.dir));
+	c = vecs_dot_product(cam_to_center, cam_to_center) -
 		(sphere.radius_or_size * sphere.radius_or_size);
 	discriminant = b * b - 4 * c * a;
 	if (discriminant < 0)

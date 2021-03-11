@@ -42,61 +42,66 @@ struct s_figure	*get_closer_figure(t_ray ray, t_figures *figures)
 t_rgb			count_sphere_color(struct s_figure figure, struct s_light light,
 		t_rgb color, struct	s_ray ray)
 {
-	t_vector vector_distance;
-	t_vector crossing;
 	t_vector norm;
-	float ratio;
+	float light_dot_norm;
+	float matt_ratio;
+	t_vector reflection;
+	float reflex_dot_reverse;
 
-	vector_distance = vector_multiply_by_number(ray.dir, figure.distance);
-	crossing = vectors_addition(ray.src, vector_distance);
-	norm = vector_norm(vectors_subtraction(crossing, figure.first_or_center));
-	ratio = vectors_dot_product(norm, light.coordinates) /
-		(vector_length(norm) * vector_length(light.coordinates));
-	t_vector R = vectors_subtraction(vector_multiply_by_number(norm,
-							2 * vectors_dot_product(norm, light.coordinates))
-									, light.coordinates);
-	float r_dot_v = vectors_dot_product(R, vector_multiply_by_number(ray
-	.dir, -1));
-	if (ratio > 0)
+	norm = vector_norm(vecs_subtraction(vecs_addition(ray.src,
+					  vec_multiply_by_number(ray.dir, figure.distance)),
+									 figure.first_or_center));
+	light_dot_norm = vecs_dot_product(norm, light.src);
+	matt_ratio = light_dot_norm / (vec_length(norm) * vec_length(light.src));
+	reflection = vecs_subtraction(
+			vec_multiply_by_number(norm,2 * light_dot_norm), light.src);
+	reflex_dot_reverse = vecs_dot_product(reflection,
+										  vec_multiply_by_number(ray.dir, -1));
+	if (matt_ratio > 0)
 	{
-		if (r_dot_v > 0)
-			ratio += pow(r_dot_v / (vector_length(R) * vector_length
-					(vector_multiply_by_number(ray .dir, -1))), SHININESS);
-		return (rgbs_addition(color, rgb_multiply(light.rgb_norm, ratio)));
+		if (reflex_dot_reverse > 0)
+			matt_ratio += powf(reflex_dot_reverse / (vec_length(reflection) *
+			 vec_length(vec_multiply_by_number(ray.dir,-1))), SHINE);
+		return (rgbs_addition(color, rgb_multiply(light.rgb_norm, matt_ratio)));
 	}
 	else
 		return (color);
 }
 
-//int				is_shaded()
+//int				is_shaded(t_figures *figures, struct s_figure figure,
+//		t_ray ray, struct s_light light);
 //{
+//	int result;
 //
+//	result = 0;
+//	while (result == 0 && figures != NULL)
+//	{
+//
+//		figures = figures->next;
+//	}
 //}
 
 int				put_color(t_all scene, t_ray ray)
 {
 	struct s_figure *figure;
-	t_rgb			result;
-	//float			lights_quantity;
+	t_rgb			light_color;
 
 	figure = get_closer_figure(ray, scene.figures);
 	if (figure == NULL)
 		return (0);
-	result = scene.ambient_rgb_norm;
-	//lights_quantity = 1;
+	light_color = scene.ambient_rgb_norm;
 	while (scene.lights != NULL)
 	{
-		//lights_quantity++;
-		if (1)//добавить условие на тень
-			result = count_sphere_color(*figure, *(scene.lights), result, ray);
+		if (1)
+			light_color = count_sphere_color(*figure, *(scene.lights),
+									light_color, ray);
 		scene.lights = scene.lights->next;
 	}
-	//return (create_color(figure->rgb, rgb_division(result, lights_quantity)));
-	return (create_color(figure->rgb, result));
+	return (create_color(figure->rgb, light_color));
 
 }
 
-void			super_ray_tracing(void *mlx, void *window, t_all scene)
+void			ray_tracing(void *mlx, void *window, t_all scene)
 {
 	int			mlx_x;
 	int 		mlx_y;

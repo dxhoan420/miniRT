@@ -14,7 +14,8 @@
 # include "vector.h"
 # include "color.h"
 
-# define SHININESS 10
+# define SHINE 100
+
 typedef enum			e_id
 {
 	SPHERE,
@@ -34,7 +35,7 @@ typedef struct			s_camera
 
 typedef struct			s_light
 {
-	t_vector		coordinates;
+	t_vector		src;
 	float			light_ratio;
 	t_rgb			rgb_norm;
 	struct s_light	*next;
@@ -81,6 +82,6 @@ typedef struct			s_viewport
 	float y_pixel;
 }						t_viewport;
 
-void		super_ray_tracing(void *mlx, void *window, t_all scene);
+void		ray_tracing(void *mlx, void *window, t_all scene);
 
 #endif //MINIRT_MINIRT_H
