@@ -17,7 +17,21 @@ t_viewport		get_viewport(int x_resolution, int y_resolution, int fov)
 	return (viewport);
 }
 
-struct s_figure	*get_closer_figure(t_ray ray, t_figures *figures)
+void			set_values(struct s_figure *figure, float dist, t_ray ray)
+{
+	t_vector normal;
+
+	figure->dist = dist;
+	figure->crossing = vecs_add(ray.src, vec_multi(ray.dir, figure->dist));
+	normal = vector_norm(vecs_subtraction(figure->crossing,
+										  figure->first_or_center));
+	if (figure->side == OUTER)
+		figure->normal = normal;
+	else
+		figure->normal = vec_multi(normal, -1);
+}
+
+struct s_figure	*get_figure(t_ray ray, t_figures *figures, int first_or_closer)
 {
 	struct s_figure *closer_one = NULL;
 	float 			minimum_positive = MAXFLOAT;
@@ -26,7 +40,9 @@ struct s_figure	*get_closer_figure(t_ray ray, t_figures *figures)
 	while (figures != NULL)
 	{
 		if (figures->id == SPHERE)
-			distance = distance_to_sphere(ray, *figures);
+			distance = distance_to_sphere(ray, figures);
+		if (first_or_closer == FIRST && distance > FLT_EPSILON)
+			return (NULL);
 		if (distance > FLT_EPSILON && distance < minimum_positive)
 		{
 			minimum_positive = distance;
@@ -35,73 +51,58 @@ struct s_figure	*get_closer_figure(t_ray ray, t_figures *figures)
 		figures = figures->next;
 	}
 	if (closer_one != NULL)
-		closer_one->distance = minimum_positive;
+		set_values(closer_one, minimum_positive, ray);
 	return(closer_one);
 }
 
-t_rgb			count_sphere_color(struct s_figure figure, struct s_light light,
-		t_rgb color, struct	s_ray ray)
+t_rgb			compute_diffuse_color(t_vector light_ray,
+						struct s_light light, t_rgb color, t_vector normal)
 {
-	t_vector norm;
-	float light_dot_norm;
-	float matt_ratio;
-	t_vector reflection;
-	float reflex_dot_reverse;
+	float norm_dot_light;
+	float ratio;
 
-	norm = vector_norm(vecs_subtraction(vecs_addition(ray.src,
-					  vec_multiply_by_number(ray.dir, figure.distance)),
-									 figure.first_or_center));
-	light_dot_norm = vecs_dot_product(norm, light.src);
-	matt_ratio = light_dot_norm / (vec_length(norm) * vec_length(light.src));
-	reflection = vecs_subtraction(
-			vec_multiply_by_number(norm,2 * light_dot_norm), light.src);
-	reflex_dot_reverse = vecs_dot_product(reflection,
-										  vec_multiply_by_number(ray.dir, -1));
-	if (matt_ratio > 0)
-	{
-		if (reflex_dot_reverse > 0)
-			matt_ratio += powf(reflex_dot_reverse / (vec_length(reflection) *
-			 vec_length(vec_multiply_by_number(ray.dir,-1))), SHINE);
-		return (rgbs_addition(color, rgb_multiply(light.rgb_norm, matt_ratio)));
-	}
-	else
+	norm_dot_light = vecs_dot(normal, light_ray);
+	if (norm_dot_light < 0)
 		return (color);
+	ratio = norm_dot_light / (vec_length(normal) * vec_length(light_ray));
+	return (rgbs_addition(color, rgb_multiply(light.rgb_norm, ratio)));
 }
 
-//int				is_shaded(t_figures *figures, struct s_figure figure,
-//		t_ray ray, struct s_light light);
-//{
-//	int result;
-//
-//	result = 0;
-//	while (result == 0 && figures != NULL)
-//	{
-//
-//		figures = figures->next;
-//	}
-//}
+int				is_shaded(t_figures *figures, t_vector crossing,
+				 t_vector light_ray)
+{
+	while (figures != NULL)
+	{
+		if (get_figure(create_ray(crossing, light_ray), figures, FIRST) != NULL)
+			return (1);
+		figures = figures->next;
+	}
+	return (0);
+}
 
-int				put_color(t_all scene, t_ray ray)
+int				get_pixel_color(t_all scene, t_ray ray)
 {
 	struct s_figure *figure;
 	t_rgb			light_color;
+	t_vector 		light_ray;
 
-	figure = get_closer_figure(ray, scene.figures);
+	figure = get_figure(ray, scene.figures, CLOSER);
 	if (figure == NULL)
 		return (0);
 	light_color = scene.ambient_rgb_norm;
 	while (scene.lights != NULL)
 	{
-		if (1)
-			light_color = count_sphere_color(*figure, *(scene.lights),
-									light_color, ray);
+		light_ray = vecs_subtraction(scene.lights->src, figure->crossing);
+//		if (1)
+		if (!is_shaded(scene.figures, figure->crossing, light_ray))
+			light_color = compute_diffuse_color(light_ray, *(scene.lights),
+												light_color, figure->normal);
 		scene.lights = scene.lights->next;
 	}
 	return (create_color(figure->rgb, light_color));
-
 }
 
-void			ray_tracing(void *mlx, void *window, t_all scene)
+void			render_scene(void *mlx, void *window, t_all scene)
 {
 	int			mlx_x;
 	int 		mlx_y;
@@ -109,9 +110,9 @@ void			ray_tracing(void *mlx, void *window, t_all scene)
 	t_viewport	viewport;
 
 	viewport = get_viewport(scene.x_resolution, scene.y_resolution,
-						 scene.cameras->field_of_view);
-	ray.src = scene.cameras->coordinates;
-	ray.dir.z = -1;//вот эту хуйню поменять надо!
+						 scene.camera.field_of_view);
+	ray.src = scene.camera.coordinates;
+	ray.dir.z = 1;//вот эту хуйню поменять надо!
 	ray.dir.y = (float)scene.y_resolution / 2 * viewport.y_pixel;
 	mlx_y = 0;
 	while (mlx_y < scene.y_resolution)
@@ -120,7 +121,7 @@ void			ray_tracing(void *mlx, void *window, t_all scene)
 		mlx_x = 0;
 		while (mlx_x < scene.x_resolution)
 		{
-			mlx_pixel_put(mlx, window, mlx_x, mlx_y, put_color(scene, ray));
+			mlx_pixel_put(mlx, window, mlx_x, mlx_y, get_pixel_color(scene, ray));
 			ray.dir.x += viewport.x_pixel;
 			mlx_x++;
 		}

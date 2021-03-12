@@ -48,7 +48,7 @@ t_vector	vector_norm(t_vector vector)
 	return (vector);
 }
 
-float		vecs_dot_product(t_vector first, t_vector second)
+float		vecs_dot(t_vector first, t_vector second)
 {
 	float	result;
 
@@ -58,7 +58,17 @@ float		vecs_dot_product(t_vector first, t_vector second)
 	return (result);
 }
 
-t_vector	vec_multiply_by_number(t_vector vector, float number)
+t_vector	vecs_cross(t_vector first, t_vector second)
+{
+	t_vector product;
+
+	product.x = first.y * second.z - first.z * second.y;
+	product.y = first.z * second.x - first.x * second.z;
+	product.z = first.x * second.y - first.y * second.x;
+	return (product);
+}
+
+t_vector	vec_multi(t_vector vector, float number)
 {
 	vector.x *= number;
 	vector.y *= number;
@@ -66,7 +76,7 @@ t_vector	vec_multiply_by_number(t_vector vector, float number)
 	return (vector);
 }
 
-t_vector	vecs_addition(t_vector add_here, t_vector add_this)
+t_vector	vecs_add(t_vector add_here, t_vector add_this)
 {
 	add_here.x += add_this.x;
 	add_here.y += add_this.y;

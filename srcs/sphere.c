@@ -27,27 +27,27 @@ void	add_sphere(t_all *scene, t_vector center, float diameter, t_rgb rgb)
 		scene->figures = new;
 }
 
-float		distance_to_sphere(t_ray ray, struct s_figure sphere)
+float		distance_to_sphere(t_ray ray, struct s_figure *sphere)
 {
-	float a;
-	float b;
-	float c;
+	t_vector cam_to_center;
+	t_vector nums;
 	float discriminant;
 	float distance;
 
-	t_vector cam_to_center;
-
-	cam_to_center = vecs_subtraction(ray.src, sphere
-			.first_or_center);
-	a = vecs_dot_product(ray.dir, ray.dir);
-	b = 2 * (vecs_dot_product(cam_to_center, ray.dir));
-	c = vecs_dot_product(cam_to_center, cam_to_center) -
-		(sphere.radius_or_size * sphere.radius_or_size);
-	discriminant = b * b - 4 * c * a;
+	cam_to_center = vecs_subtraction(ray.src, sphere->first_or_center);
+	nums.x = vecs_dot(ray.dir, ray.dir);
+	nums.y = 2 * (vecs_dot(cam_to_center, ray.dir));
+	nums.z = vecs_dot(cam_to_center, cam_to_center) -
+			 (sphere->radius_or_size * sphere->radius_or_size);
+	discriminant = nums.y * nums.y - 4 * nums.z * nums.x;
 	if (discriminant < 0)
 		return (0);
-	distance = (-b - sqrtf(discriminant)) / 2;
+	distance = (-nums.y - sqrtf(discriminant)) / (2 * nums.x);
 	if (distance < 0)
-		distance = (-b + sqrtf(discriminant)) / 2;
+	{
+		distance = (-nums.y + sqrtf(discriminant)) / (2 * nums.x);
+		sphere->side = INNER;
+	} else
+		sphere->side = OUTER;
 	return (distance);
 }
