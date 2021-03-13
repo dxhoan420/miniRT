@@ -43,7 +43,7 @@ struct s_figure	*get_figure(t_ray ray, t_figures *figures, int first_or_closer)
 			distance = distance_to_sphere(ray, figures);
 		if (first_or_closer == FIRST && distance>FLT_EPSILON)
 		{
-//			if (distance < 0.99)
+//			if (distance < 1)
 				return (figures);
 //			else
 //				return (NULL);
