@@ -14,8 +14,7 @@
 # include "vector.h"
 # include "color.h"
 
-# define SHINE	50
-# define SHADOW_NOISE_REDUCTION	10000
+
 # define CLOSER	0
 # define FIRST	1
 
@@ -96,5 +95,5 @@ typedef struct			s_viewport
 }						t_viewport;
 
 void		render_scene(void *mlx, void *window, t_all scene);
-
+int				get_pixel_color(t_all scene, t_ray ray);
 #endif //MINIRT_MINIRT_H
