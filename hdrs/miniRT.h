@@ -15,6 +15,7 @@
 # include "color.h"
 
 # define SHINE	50
+# define SHADOW_NOISE_REDUCTION	10000
 # define CLOSER	0
 # define FIRST	1
 
@@ -52,7 +53,7 @@ typedef struct			s_figure
 {
 	t_rgb 			rgb;
 	t_vector		first_or_center;
-	t_vector		second_or_norma;
+	t_vector		second;
 	t_vector		third;
 	float			radius_or_size;
 	float			height;
@@ -78,7 +79,9 @@ typedef struct		s_all
 
 void		add_sphere(t_all *scene, t_vector center, float diameter,
 					   t_rgb rgb);
-void		add_plane();
+void		add_plane(t_all *scene, t_vector coordinates, t_vector norm,
+				t_rgb rgb);
+float		distance_to_plane(t_ray ray, struct s_figure *plane);
 float		distance_to_sphere(t_ray ray, struct s_figure *sphere);
 void		add_camera(t_cameras **cameras, t_vector coordinates,
 				   t_vector norma_vector,int field_of_view);
