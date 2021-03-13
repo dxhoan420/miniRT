@@ -13,7 +13,7 @@ t_vector	create_vector(float x, float y, float z)
 	return (vector);
 }
 
-t_ray 		create_ray(t_vector ray, t_vector camera_coordinates)
+t_ray 		create_ray(t_vector camera_coordinates, t_vector ray)
 {
 	t_ray new_ray;
 

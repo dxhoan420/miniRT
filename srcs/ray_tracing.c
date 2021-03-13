@@ -22,7 +22,7 @@ void			set_values(struct s_figure *figure, float dist, t_ray ray)
 	t_vector normal;
 
 	figure->dist = dist;
-	figure->crossing = vecs_add(ray.src, vec_multi(ray.dir, figure->dist));
+	figure->crossing = vecs_add(ray.src, vec_multi(ray.dir, figure->dist * 0.999f));
 	normal = vector_norm(vecs_subtraction(figure->crossing,
 										  figure->first_or_center));
 	if (figure->side == OUTER)
@@ -41,9 +41,14 @@ struct s_figure	*get_figure(t_ray ray, t_figures *figures, int first_or_closer)
 	{
 		if (figures->id == SPHERE)
 			distance = distance_to_sphere(ray, figures);
-		if (first_or_closer == FIRST && distance > FLT_EPSILON)
-			return (NULL);
-		if (distance > FLT_EPSILON && distance < minimum_positive)
+		if (first_or_closer == FIRST && distance>FLT_EPSILON)
+		{
+//			if (distance < 0.99)
+				return (figures);
+//			else
+//				return (NULL);
+		}
+		else if (distance > FLT_EPSILON && distance < minimum_positive)
 		{
 			minimum_positive = distance;
 			closer_one = figures;
@@ -94,7 +99,7 @@ int				get_pixel_color(t_all scene, t_ray ray)
 	{
 		light_ray = vecs_subtraction(scene.lights->src, figure->crossing);
 //		if (1)
-		if (!is_shaded(scene.figures, figure->crossing, light_ray))
+		if (!is_shaded(scene.figures, figure->crossing, vector_norm(light_ray)))
 			light_color = compute_diffuse_color(light_ray, *(scene.lights),
 												light_color, figure->normal);
 		scene.lights = scene.lights->next;
@@ -106,26 +111,27 @@ void			render_scene(void *mlx, void *window, t_all scene)
 {
 	int			mlx_x;
 	int 		mlx_y;
-	t_ray 		ray;
+	t_vector	ray;
 	t_viewport	viewport;
 
 	viewport = get_viewport(scene.x_resolution, scene.y_resolution,
 						 scene.camera.field_of_view);
-	ray.src = scene.camera.coordinates;
-	ray.dir.z = 1;//вот эту хуйню поменять надо!
-	ray.dir.y = (float)scene.y_resolution / 2 * viewport.y_pixel;
+	ray.z = 1;//вот эту хуйню поменять надо!
+	ray.y = (float)scene.y_resolution / 2 * viewport.y_pixel;
 	mlx_y = 0;
 	while (mlx_y < scene.y_resolution)
 	{
-		ray.dir.x = (-(float)scene.x_resolution / 2) * viewport.x_pixel;
+		ray.x = (-(float)scene.x_resolution / 2) * viewport.x_pixel;
 		mlx_x = 0;
 		while (mlx_x < scene.x_resolution)
 		{
-			mlx_pixel_put(mlx, window, mlx_x, mlx_y, get_pixel_color(scene, ray));
-			ray.dir.x += viewport.x_pixel;
+			mlx_pixel_put(mlx, window, mlx_x, mlx_y, get_pixel_color(scene,
+				create_ray(scene.camera.coordinates, vector_norm(ray))));
+			//зачем нормализация?
+			ray.x += viewport.x_pixel;
 			mlx_x++;
 		}
-		ray.dir.y -= viewport.y_pixel;
+		ray.y -= viewport.y_pixel;
 		mlx_y++;
 	}
 }
