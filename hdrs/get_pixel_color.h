@@ -6,7 +6,7 @@
 #define MINIRT_GET_PIXEL_COLOR_H
 
 #include "../hdrs/miniRT.h"
-# define SHINE	200
+# define SHINE	250
 //100000 minimum for dark scene
 # define SHADOW_NOISE_REDUCTION	100000
 

@@ -63,15 +63,16 @@ int				get_pixel_color(t_all scene, t_ray ray)
 	light_color = scene.ambient_rgb_norm;
 	while (scene.lights != NULL)
 	{
-		light_dir = vecs_subtraction(scene.lights->src, figure->crossing);
-		if (!is_shaded(scene.figures, figure->crossing, light_dir))
+		light_dir = vecs_subtraction(scene.lights->src, figure->hit);
+		if (1)
+//		if (!is_shaded(scene.figures, figure->hit, light_dir))
 		{
 			light_color = compute_diffuse_color(vector_norm(light_dir),
 							scene.lights->rgb_norm, light_color, figure->normal);
-			light_color = compute_specular_color(create_ray(
-						vector_norm(light_dir),vector_norm(
-						vecs_subtraction(ray.src, figure->crossing))),
-					 figure->normal,scene.lights->rgb_norm,light_color);
+//			light_color = compute_specular_color(create_ray(
+//						vector_norm(light_dir),vector_norm(
+//						vecs_subtraction(ray.src, figure->hit))),
+//					 figure->normal,scene.lights->rgb_norm,light_color);
 		}
 		scene.lights = scene.lights->next;
 	}

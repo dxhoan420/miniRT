@@ -18,14 +18,14 @@
 # define CLOSER	0
 # define FIRST	1
 
-typedef enum			e_id
+typedef enum			e_type
 {
-	SPHERE,
-	PLANE,
-	SQUARE,
-	CYLINDER,
-	TRIANGLE
-}						t_id;
+	SPHERE,		//0
+	PLANE,		//1
+	TRIANGLE,
+	SQUARE,		//2
+	CYLINDER
+}						t_type;
 
 typedef enum 			e_side
 {
@@ -39,6 +39,8 @@ typedef struct			s_camera
 	t_vector		norma_vector;
 	int				field_of_view;
 	struct s_camera	*next;
+	struct s_camera	*prev;
+
 }					t_cameras;
 
 typedef struct			s_light
@@ -51,17 +53,17 @@ typedef struct			s_light
 typedef struct			s_figure
 {
 	t_rgb 			rgb;
-	t_vector		first_or_center;
+	t_vector		first;
 	t_vector		second;
 	t_vector		third;
 	float			radius_or_size;
 	float			height;
 	float			dist;
-	t_vector		crossing;
+	t_vector		hit;
 	t_vector		normal;
-	t_id 			id;
+	t_type 			type;
 	t_side			side;
-
+	float 			(*get_distance)(t_ray, struct s_figure *);
 	struct s_figure	*next;
 }						t_figures;
 
@@ -75,13 +77,12 @@ typedef struct		s_all
 	t_figures		*figures;
 }					t_all;
 
-
 void		add_sphere(t_all *scene, t_vector center, float diameter,
-					   t_rgb rgb);
+				 	t_rgb rgb);
 void		add_plane(t_all *scene, t_vector coordinates, t_vector norm,
-				t_rgb rgb);
-float		distance_to_plane(t_ray ray, struct s_figure *plane);
-float		distance_to_sphere(t_ray ray, struct s_figure *sphere);
+					t_rgb rgb);
+void		add_triangle(t_all *scene, t_vector first, t_ray second_n_third,
+			   		t_rgb rgb);
 void		add_camera(t_cameras **cameras, t_vector coordinates,
 				   t_vector norma_vector,int field_of_view);
 void		add_light(t_all *scene, t_vector coordinates, t_rgb rgb_norm);

@@ -12,9 +12,10 @@
 
 NAME	= miniRT
 
-SRCS	= main.c $(addprefix srcs/, camera.c ray_tracing.c vector.c sphere.c \
-									plane.c color.c get_pixel_color.c\
-									get_pixel_color_utils.c)
+SRCS	= $(addprefix srcs/, main.c camera.c ray_tracing.c color.c \
+							get_pixel_color.c get_figure.c $(GEOMETRY))
+
+GEOMETRY= $(addprefix geometry/, vector.c sphere.c plane.c triangle.c)
 
 HDRS	= $(addprefix hdrs/, miniRT.h vector.h color.h get_pixel_color.h)
 

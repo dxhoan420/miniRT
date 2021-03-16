@@ -2,30 +2,7 @@
 // Created by Demeter Xhoan on 2/20/21.
 //
 
-#include "../hdrs/miniRT.h"
-
-void	add_sphere(t_all *scene, t_vector center, float diameter, t_rgb rgb)
-{
-	t_figures *iterator = scene->figures;
-	struct s_figure *new;
-
-	new = malloc(sizeof (struct s_figure));
-	if (new == NULL)
-		exit(-1);
-	new->id	= SPHERE;
-	new->first_or_center = center;
-	new->radius_or_size = diameter / 2;
-	new->rgb = rgb;
-	new->next = NULL;
-	if (iterator != NULL)
-	{
-		while (iterator->next != NULL)
-			iterator = iterator->next;
-		iterator->next = new;
-	}
-	else
-		scene->figures = new;
-}
+#include "../../hdrs/miniRT.h"
 
 float		distance_to_sphere(t_ray ray, struct s_figure *sphere)
 {
@@ -34,7 +11,7 @@ float		distance_to_sphere(t_ray ray, struct s_figure *sphere)
 	float discriminant;
 	float distance;
 
-	cam_to_center = vecs_subtraction(ray.src, sphere->first_or_center);
+	cam_to_center = vecs_subtraction(ray.src, sphere->first);
 	nums.x = vecs_dot(ray.dir, ray.dir);
 	nums.y = 2 * (vecs_dot(cam_to_center, ray.dir));
 	nums.z = vecs_dot(cam_to_center, cam_to_center) -
@@ -50,4 +27,29 @@ float		distance_to_sphere(t_ray ray, struct s_figure *sphere)
 	} else
 		sphere->side = OUTER;
 	return (distance);
+}
+
+void	add_sphere(t_all *scene, t_vector center, float diameter, t_rgb rgb)
+{
+	t_figures *iterator;
+	struct s_figure *new;
+
+	iterator = scene->figures;
+	new = malloc(sizeof (struct s_figure));
+	if (new == NULL)
+		exit(-1);
+	new->type	= SPHERE;
+	new->get_distance = distance_to_sphere;
+	new->first = center;
+	new->radius_or_size = diameter / 2;
+	new->rgb = rgb;
+	new->next = NULL;
+	if (iterator != NULL)
+	{
+		while (iterator->next != NULL)
+			iterator = iterator->next;
+		iterator->next = new;
+	}
+	else
+		scene->figures = new;
 }
