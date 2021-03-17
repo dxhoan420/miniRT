@@ -6,8 +6,8 @@
 
 float	distance_to_sphere(t_ray ray, struct s_figure *sphere)
 {
-	t_vector	cam_to_center;
-	t_vector	nums;
+	t_vec		cam_to_center;
+	t_vec		nums;
 	float		discriminant;
 	float		distance;
 
@@ -30,27 +30,13 @@ float	distance_to_sphere(t_ray ray, struct s_figure *sphere)
 	return (distance);
 }
 
-void	add_sphere(t_all *scene, t_vector center, float diameter, t_rgb rgb)
+void	add_sphere(t_all *scene, t_vec center, float diameter, t_rgb rgb)
 {
-	t_figures		*iterator;
 	struct s_figure	*new;
 
-	iterator = scene->figures;
-	new = malloc(sizeof (struct s_figure));
-	if (new == NULL)
-		exit(-1);
+	new = get_last_figure_of_scene(scene, rgb);
 	new->type = SPHERE;
 	new->get_distance = distance_to_sphere;
 	new->first = center;
 	new->radius_or_size = diameter / 2;
-	new->rgb = rgb;
-	new->next = NULL;
-	if (iterator != NULL)
-	{
-		while (iterator->next != NULL)
-			iterator = iterator->next;
-		iterator->next = new;
-	}
-	else
-		scene->figures = new;
 }

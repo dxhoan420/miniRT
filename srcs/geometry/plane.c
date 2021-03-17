@@ -7,7 +7,7 @@
 float	distance_to_plane(t_ray ray, struct s_figure *plane)
 {
 	float		norm_dot_light;
-	t_vector	from_cam_to_plane;
+	t_vec		from_cam_to_plane;
 	float		distance;
 
 	norm_dot_light = vecs_dot(ray.dir, plane->normal);
@@ -24,27 +24,13 @@ float	distance_to_plane(t_ray ray, struct s_figure *plane)
 	return (0);
 }
 
-void	add_plane(t_all *scene, t_vector coordinates, t_vector norm, t_rgb rgb)
+void	add_plane(t_all *scene, t_vec point, t_vec norm, t_rgb rgb)
 {
-	t_figures		*iterator;
 	struct s_figure	*new;
 
-	iterator = scene->figures;
-	new = malloc(sizeof (struct s_figure));
-	if (new == NULL)
-		exit(-1);
+	new = get_last_figure_of_scene(scene, rgb);
 	new->type = PLANE;
 	new->get_distance = distance_to_plane;
-	new->first = coordinates;
+	new->first = point;
 	new->normal = vector_norm(norm);
-	new->rgb = rgb;
-	new->next = NULL;
-	if (iterator != NULL)
-	{
-		while (iterator->next != NULL)
-			iterator = iterator->next;
-		iterator->next = new;
-	}
-	else
-		scene->figures = new;
 }

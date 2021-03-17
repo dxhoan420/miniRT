@@ -4,19 +4,19 @@
 
 #include "../hdrs/miniRT.h"
 
-void	add_camera(t_cameras **cameras, t_vector coordinates,
-				t_vector norma_vector, int field_of_view)
+void	add_camera(t_cameras **cams, t_vec point,
+				   t_vec normal, int fov)
 {
 	t_cameras	*iterator;
 	t_cameras	*new;
 
-	iterator = *cameras;
+	iterator = *cams;
 	new = malloc(sizeof (t_cameras));
 	if (new == NULL)
 		exit(-1);
-	new->coordinates = coordinates;
-	new->norma_vector = norma_vector;
-	new->field_of_view = field_of_view;
+	new->coordinates = point;
+	new->norma_vector = normal;
+	new->field_of_view = fov;
 	new->next = NULL;
 	if (iterator != NULL)
 	{
@@ -25,14 +25,14 @@ void	add_camera(t_cameras **cameras, t_vector coordinates,
 		iterator->next = new;
 	}
 	else
-		*cameras = new;
+		*cams = new;
 }
 
-t_vector	cam_dir(t_vector origin, t_vector mz)
+t_vec	cam_dir(t_vec origin, t_vec mz)
 {
-	t_vector	mx;
-	t_vector	my;
-	t_vector	result_ray;
+	t_vec	mx;
+	t_vec	my;
+	t_vec	result_ray;
 
 	mx = vecs_cross(create_vector(0, 1, 0), mz);
 	my = vecs_cross(mz, mx);
@@ -42,7 +42,7 @@ t_vector	cam_dir(t_vector origin, t_vector mz)
 	return (result_ray);
 }
 
-void	add_light(t_all *scene, t_vector coordinates, t_rgb rgb_norm)
+void	add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm)
 {
 	t_lights		*iterator;
 	struct s_light	*new;

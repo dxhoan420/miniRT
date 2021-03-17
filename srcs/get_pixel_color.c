@@ -4,22 +4,39 @@
 
 #include "../hdrs/get_pixel_color.h"
 
-t_rgb	compute_diffuse_color(t_vector light_ray, t_rgb rgb_norm,
-								t_rgb color, t_vector normal)
+t_rgb	diffuse_color(struct s_light light, t_rgb color, t_vec normal)
 {
 	float	norm_dot_light;
 	float	ratio;
 
-	norm_dot_light = vecs_dot(normal, light_ray);
+	norm_dot_light = vecs_dot(normal, light.dir);
 	if (norm_dot_light > 0)
 	{
-		ratio = norm_dot_light / (vec_length(normal) * vec_length(light_ray));
-		return (rgbs_addition(color, rgb_multiply(rgb_norm, ratio)));
+		ratio = norm_dot_light / (vec_length(normal) * vec_length(light.dir));
+		return (rgbs_addition(color, rgb_multiply(light.rgb_norm, ratio)));
 	}
 	return (color);
 }
 
-int	is_shaded(t_figures *figures, t_vector crossing, t_vector light_ray)
+t_rgb	compute_specular_color(struct s_light light, t_vec normal, t_rgb color,
+		t_vec view_dir)
+{
+	t_vec	half_way_dir;
+	float	spec;
+
+	view_dir = vector_norm(view_dir);
+	light.dir = vector_norm(light.dir);
+	half_way_dir = vector_norm(vecs_add(light.dir, view_dir));
+	spec = vecs_dot(normal, half_way_dir);
+	if (spec > 0)
+	{
+		spec = powf(spec, SHINE);
+		return (rgbs_addition(color, rgb_multiply(light.rgb_norm, spec)));
+	}
+	return (color);
+}
+
+int	is_shaded(t_figures *figures, t_vec crossing, t_vec light_ray)
 {
 	while (figures != NULL)
 	{
@@ -30,49 +47,35 @@ int	is_shaded(t_figures *figures, t_vector crossing, t_vector light_ray)
 	return (0);
 }
 
-t_rgb	compute_specular_color(t_ray light_n_view_dir, t_vector normal,
-									t_rgb rgb_norm, t_rgb color)
+t_rgb	get_light_color(struct s_light light, struct s_figure figure,
+		t_rgb color, t_ray ray)
 {
-	t_vector	half_way_dir;
-	t_vector	light_dir;
-	t_vector	view_dir;
-	float		spec;
+	t_vec	view_dir;
 
-	light_dir = light_n_view_dir.src;
-	view_dir = light_n_view_dir.dir;
-	half_way_dir = vector_norm(vecs_add(light_dir, view_dir));
-	spec = vecs_dot(normal, half_way_dir);
-	if (spec > 0)
-	{
-		spec = powf(spec, SHINE);
-		return (rgbs_addition(color, rgb_multiply(rgb_norm, spec)));
-	}
+	view_dir = vecs_subtraction(ray.src, figure.hit);
+	color = diffuse_color(light, color, figure.normal);
+	color = compute_specular_color(light, figure.normal, color, view_dir);
 	return (color);
 }
 
 int	get_pixel_color(t_all scene, t_ray ray)
 {
 	struct s_figure	*figure;
-	t_rgb			light_color;
-	t_vector		light_dir;
+	t_rgb			color;
+	struct s_light	light;
 
 	figure = get_figure(ray, scene.figures, CLOSER);
 	if (figure == NULL)
 		return (0);
-	light_color = scene.ambient_rgb_norm;
+	color = scene.ambient_rgb_norm;
 	while (scene.lights != NULL)
 	{
-		light_dir = vecs_subtraction(scene.lights->src, figure->hit);
-		if (!is_shaded(scene.figures, figure->hit, light_dir))
-		{
-			light_color = compute_diffuse_color(vector_norm(light_dir),
-					scene.lights->rgb_norm, light_color, figure->normal);
-			light_color = compute_specular_color(create_ray(
-						vector_norm(light_dir), vector_norm(
-							vecs_subtraction(ray.src, figure->hit))),
-					figure->normal, scene.lights->rgb_norm, light_color);
-		}
+		light.src = scene.lights->src;
+		light.rgb_norm = scene.lights->rgb_norm;
+		light.dir = vecs_subtraction(light.src, figure->hit);
+		if (!is_shaded(scene.figures, figure->hit, light.dir))
+			color = get_light_color(light, *figure, color, ray);
 		scene.lights = scene.lights->next;
 	}
-	return (create_color(figure->rgb, light_color));
+	return (create_color(figure->rgb, color));
 }

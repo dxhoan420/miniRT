@@ -2,12 +2,12 @@
 // Created by Demeter Xhoan on 2/24/21.
 //
 
-#include <math.h>
 #include "../../hdrs/vector.h"
+#include <math.h>
 
-t_vector	create_vector(float x, float y, float z)
+t_vec	create_vector(float x, float y, float z)
 {
-	t_vector	vector;
+	t_vec	vector;
 
 	vector.x = x;
 	vector.y = y;
@@ -15,7 +15,7 @@ t_vector	create_vector(float x, float y, float z)
 	return (vector);
 }
 
-t_ray	create_ray(t_vector camera_coordinates, t_vector ray)
+t_ray	create_ray(t_vec camera_coordinates, t_vec ray)
 {
 	t_ray	new_ray;
 
@@ -24,12 +24,12 @@ t_ray	create_ray(t_vector camera_coordinates, t_vector ray)
 	return (new_ray);
 }
 
-float	vec_length(t_vector vec)
+float	vec_length(t_vec vec)
 {
 	return (sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z));
 }
 
-t_vector	vector_norm(t_vector vector)
+t_vec	vector_norm(t_vec vector)
 {
 	float	length;
 

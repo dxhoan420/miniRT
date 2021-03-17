@@ -4,7 +4,7 @@
 
 #include "../../hdrs/vector.h"
 
-t_vector	vecs_subtraction(t_vector subtract_from, t_vector to_subtract)
+t_vec	vecs_subtraction(t_vec subtract_from, t_vec to_subtract)
 {
 	subtract_from.x -= to_subtract.x;
 	subtract_from.y -= to_subtract.y;
@@ -12,7 +12,7 @@ t_vector	vecs_subtraction(t_vector subtract_from, t_vector to_subtract)
 	return (subtract_from);
 }
 
-float	vecs_dot(t_vector first, t_vector second)
+float	vecs_dot(t_vec first, t_vec second)
 {
 	float	result;
 
@@ -20,9 +20,9 @@ float	vecs_dot(t_vector first, t_vector second)
 	return (result);
 }
 
-t_vector	vecs_cross(t_vector first, t_vector second)
+t_vec	vecs_cross(t_vec first, t_vec second)
 {
-	t_vector	product;
+	t_vec	product;
 
 	product.x = first.y * second.z - first.z * second.y;
 	product.y = first.z * second.x - first.x * second.z;
@@ -30,7 +30,7 @@ t_vector	vecs_cross(t_vector first, t_vector second)
 	return (product);
 }
 
-t_vector	vec_multi(t_vector vector, float number)
+t_vec	vec_multi(t_vec vector, float number)
 {
 	vector.x *= number;
 	vector.y *= number;
@@ -38,7 +38,7 @@ t_vector	vec_multi(t_vector vector, float number)
 	return (vector);
 }
 
-t_vector	vecs_add(t_vector add_here, t_vector add_this)
+t_vec	vecs_add(t_vec add_here, t_vec add_this)
 {
 	add_here.x += add_this.x;
 	add_here.y += add_this.y;

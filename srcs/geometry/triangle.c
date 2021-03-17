@@ -4,62 +4,41 @@
 
 #include "../../hdrs/miniRT.h"
 
-float		check_edge(t_vector second, t_vector first, t_vector normal,
-				t_vector crossing)
+//by Tomas Möller & Ben Trumbore
+float distance_to_triangle(t_ray ray, struct s_figure *triangle)
 {
-	t_vector edge = vecs_subtraction(second, first);
-	t_vector from_point_to_cross = vecs_subtraction(crossing, first);
-	t_vector cross = vecs_cross(edge, from_point_to_cross);
-	return (vecs_dot(normal, cross));
+	t_vec edge_1;
+	t_vec edge_2;
+	t_vec pvec;
+	t_vec tvec;
+	t_vec det;
+
+	edge_1 = vecs_subtraction(triangle->second, triangle->first);
+	edge_2 = vecs_subtraction(triangle->third, triangle->first);
+	pvec = vecs_cross(ray.dir, edge_2);
+	det.x = vecs_dot(edge_1, pvec);
+	if (det.x < 1e-8 && det.x > -1e-8)
+		return 0;
+	det.x = 1 / det.x;
+	tvec = vecs_subtraction(ray.src, triangle->first);
+	det.y = vecs_dot(tvec, pvec) * det.x;
+	if (det.y < 0 || det.y > 1)
+		return (0);
+	tvec = vecs_cross(tvec, edge_1);
+	det.z = vecs_dot(ray.dir, tvec) * det.x;
+	if (det.z < 0 || det.y + det.z > 1)
+		return (0);
+	return (vecs_dot(edge_2, tvec) * det.x);
 }
 
-float	distance_to_triangle(t_ray ray, struct s_figure *trngl)
+void	add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb)
 {
-	float distance;
-	float norm_dot_dir;
-	float norm_dot_first;
-
-	trngl->normal = vector_norm(vecs_cross(
-			vecs_subtraction(trngl->second, trngl->first),
-			vecs_subtraction(trngl->third, trngl->first)));
-	norm_dot_dir = vecs_dot(trngl->normal, ray.dir);
-	if (fabsf(norm_dot_dir) < FLT_EPSILON)
-		return (0);
-	norm_dot_first = vecs_dot(trngl->normal, trngl->first);
-	distance = -(vecs_dot(trngl->normal, ray.src) + norm_dot_first) /
-			vecs_dot(trngl->normal, ray.dir);
-	if (distance < 0)
-		return (0);
-	if (check_edge(trngl->second, trngl->first, trngl->normal, trngl->hit) < 0
-	|| check_edge(trngl->third, trngl->second, trngl->normal, trngl->hit) < 0
-	|| check_edge(trngl-> first, trngl->third, trngl->normal, trngl->hit) < 0)
-		return (0);
-	return (distance);
-}
-
-void	add_triangle(t_all *scene, t_vector first, t_ray sec_n_thr, t_rgb
-rgb)
-{
-	t_figures *iterator;
 	struct s_figure *new;
 
-	iterator = scene->figures;
-	new = malloc(sizeof (struct s_figure));
-	if (new == NULL)
-		exit(-1);
+	new = get_last_figure_of_scene(scene, rgb);
 	new->type = TRIANGLE;
 	new->get_distance = distance_to_triangle;
-	new->first = first;
-	new->second = sec_n_thr.src;
-	new->third = sec_n_thr.dir;
-	new->rgb = rgb;
-	new->next = NULL;
-	if (iterator != NULL)
-	{
-		while (iterator->next != NULL)
-			iterator = iterator->next;
-		iterator->next = new;
-	}
-	else
-		scene->figures = new;
+	new->first = one;
+	new->second = two_three.src;
+	new->third = two_three.dir;
 }

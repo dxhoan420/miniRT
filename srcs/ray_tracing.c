@@ -29,7 +29,7 @@ void	render_scene(void *mlx, void *window, t_all scene)
 {
 	int			mlx_x;
 	int			mlx_y;
-	t_vector	ray;
+	t_vec		ray;
 	t_viewport	viewport;
 
 	viewport = get_viewport(scene.x_resolution, scene.y_resolution,
