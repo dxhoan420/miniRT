@@ -4,7 +4,15 @@
 
 #include "../hdrs/miniRT.h"
 
-t_viewport		get_viewport(int x_resolution, int y_resolution, int fov)
+typedef struct s_viewport
+{
+	float	x_size;
+	float	y_size;
+	float	x_pixel;
+	float	y_pixel;
+}			t_viewport;
+
+t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
 {
 	t_viewport	viewport;
 	float		ratio;
@@ -17,17 +25,16 @@ t_viewport		get_viewport(int x_resolution, int y_resolution, int fov)
 	return (viewport);
 }
 
-
-void			render_scene(void *mlx, void *window, t_all scene)
+void	render_scene(void *mlx, void *window, t_all scene)
 {
 	int			mlx_x;
-	int 		mlx_y;
+	int			mlx_y;
 	t_vector	ray;
 	t_viewport	viewport;
 
 	viewport = get_viewport(scene.x_resolution, scene.y_resolution,
-						 scene.camera.field_of_view);
-	ray.z = 1;//вот эту хуйню поменять надо!
+			 scene.camera.field_of_view);
+	ray.z = 1;
 	ray.y = (float)scene.y_resolution / 2 * viewport.y_pixel;
 	mlx_y = 0;
 	while (mlx_y < scene.y_resolution)
