@@ -8,6 +8,8 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 {
 	t_vec	normal;
 
+	if (figure->type == SQUARE)
+		return;
 	figure->hit = vecs_add(ray.src, vec_multi(ray.dir, dist
 				* (1 - FLT_EPSILON * SHADOW_NOISE_REDUCTION)));
 	if (figure->type == SPHERE)
@@ -25,7 +27,8 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 				vecs_subtraction(figure->third, figure->first)));
 		if (vecs_dot(ray.dir, normal) > 0)
 			figure->normal = vec_multi(normal, -1);
-		figure->normal = normal;
+		else
+			figure->normal = normal;
 	}
 }
 

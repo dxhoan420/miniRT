@@ -33,12 +33,12 @@ float distance_to_triangle(t_ray ray, struct s_figure *triangle)
 
 void	add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb)
 {
-	struct s_figure *new;
+	struct s_figure *triangle;
 
-	new = get_last_figure_of_scene(scene, rgb);
-	new->type = TRIANGLE;
-	new->get_distance = distance_to_triangle;
-	new->first = one;
-	new->second = two_three.src;
-	new->third = two_three.dir;
+	triangle = get_last_figure_of_scene(scene, rgb);
+	triangle->type = TRIANGLE;
+	triangle->get_distance = distance_to_triangle;
+	triangle->first = one;
+	triangle->second = two_three.src;
+	triangle->third = two_three.dir;
 }

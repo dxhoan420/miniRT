@@ -14,8 +14,9 @@
 # include "vector.h"
 # include "color.h"
 
-# define CLOSER	0
-# define FIRST	1
+# define SHINE	250
+//100000 minimum for dark scene
+# define SHADOW_NOISE_REDUCTION	100000
 
 typedef enum e_type
 {
@@ -79,6 +80,7 @@ typedef struct s_all
 void		add_sphere(t_all *scene, t_vec center, float diameter, t_rgb rgb);
 void		add_plane(t_all *scene, t_vec point, t_vec norm, t_rgb rgb);
 void		add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb);
+void		add_square(t_all *scene, t_ray cntr_n_nrm, float size, t_rgb rgb);
 void		add_camera(t_cameras **cams, t_vec point, t_vec normal, int fov);
 void		add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm);
 void		render_scene(void *mlx, void *window, t_all scene);

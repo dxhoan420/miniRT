@@ -32,11 +32,11 @@ float	distance_to_sphere(t_ray ray, struct s_figure *sphere)
 
 void	add_sphere(t_all *scene, t_vec center, float diameter, t_rgb rgb)
 {
-	struct s_figure	*new;
+	struct s_figure	*sphere;
 
-	new = get_last_figure_of_scene(scene, rgb);
-	new->type = SPHERE;
-	new->get_distance = distance_to_sphere;
-	new->first = center;
-	new->radius_or_size = diameter / 2;
+	sphere = get_last_figure_of_scene(scene, rgb);
+	sphere->type = SPHERE;
+	sphere->get_distance = distance_to_sphere;
+	sphere->first = center;
+	sphere->radius_or_size = diameter / 2;
 }
