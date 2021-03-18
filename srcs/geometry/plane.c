@@ -35,33 +35,22 @@ void	add_plane(t_all *scene, t_vec point, t_vec norm, t_rgb rgb)
 	new->normal = vector_norm(norm);
 }
 
-float	distance_to_square(t_ray ray, struct s_figure *square)
-{
-	float distance;
-	float half_of_size;
+//float	distance_to_square(t_ray ray, struct s_figure *square)
+//{
+//	float distance;
+//	float half_of_size;
+//
+//	distance = distance_to_plane(ray, square);
+//	if (distance > 0)
+//	{
+//		half_of_size = square->radius_or_size / 2;
+//		square->hit = vecs_add(ray.src, vec_multi(ray.dir, distance
+//							   * (1 - FLT_EPSILON * SHADOW_NOISE_REDUCTION)));
+//		if (fabsf(square->hit.x - square->first.x) <= half_of_size &&
+//				fabsf(square->hit.y - square->first.y) <= half_of_size &&
+//				fabsf(square->hit.z - square->first.z) <= half_of_size)
+//			return (distance);
+//	}
+//	return (0);
+//}
 
-	distance = distance_to_plane(ray, square);
-	if (distance > 0)
-	{
-		half_of_size = square->radius_or_size / 2;
-		square->hit = vecs_add(ray.src, vec_multi(ray.dir, distance
-							   * (1 - FLT_EPSILON * SHADOW_NOISE_REDUCTION)));
-		if (fabsf(square->hit.x - square->first.x) <= half_of_size &&
-				fabsf(square->hit.y - square->first.y) <= half_of_size &&
-				fabsf(square->hit.z - square->first.z) <= half_of_size)
-			return (distance);
-	}
-	return (0);
-}
-
-void	add_square(t_all *scene, t_ray cntr_n_nrm, float size, t_rgb rgb)
-{
-	struct s_figure *square;
-
-	square = get_last_figure_of_scene(scene, rgb);
-	square->type = SQUARE;
-	square->get_distance = distance_to_square;
-	square->first = cntr_n_nrm.src;
-	square->normal = vector_norm(cntr_n_nrm.dir);
-	square->radius_or_size = size;
-}

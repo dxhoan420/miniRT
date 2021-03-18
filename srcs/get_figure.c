@@ -8,8 +8,6 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 {
 	t_vec	normal;
 
-	if (figure->type == SQUARE)
-		return;
 	figure->hit = vecs_add(ray.src, vec_multi(ray.dir, dist
 				* (1 - FLT_EPSILON * SHADOW_NOISE_REDUCTION)));
 	if (figure->type == SPHERE)

@@ -33,7 +33,7 @@ float distance_to_triangle(t_ray ray, struct s_figure *triangle)
 
 void	add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb)
 {
-	struct s_figure *triangle;
+	struct s_figure	*triangle;
 
 	triangle = get_last_figure_of_scene(scene, rgb);
 	triangle->type = TRIANGLE;
@@ -41,4 +41,61 @@ void	add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb)
 	triangle->first = one;
 	triangle->second = two_three.src;
 	triangle->third = two_three.dir;
+}
+
+void	get_vertex(t_vec center, t_vec normal, float size, t_vec *vertex)
+{
+	t_vec	horizontal;
+	t_vec	vertical;
+	t_vec	start;
+
+	if (normal.x == 0)
+		start = create_vector(1, 0, 0);
+	else
+		start = create_vector(0, 1, 0);
+	horizontal = vector_norm(vecs_cross(normal, start));
+	vertical = vector_norm(vecs_cross(horizontal, normal));
+	vertex[0] = vecs_add(vecs_add(vec_multi(vertical, size / 2), center),
+					  vec_multi(horizontal, size / 2));
+	vertex[1] = vecs_add(vertex[0], vec_multi(vertical, -size));
+	vertex[2] = vecs_add(vertex[1], vec_multi(horizontal, -size));
+	vertex[3] = vecs_add(vertex[2], vec_multi(vertical, size));
+}
+
+float	distance_to_square(t_ray ray, struct s_figure *square)
+{
+	t_vec 			vertex[4];
+	float			distance;
+	struct s_figure triangle;
+
+	get_vertex(square->first, square->normal, square->radius_or_size, vertex);
+	triangle.first = vertex[0];
+	triangle.second = vertex[1];
+	triangle.third = vertex[2];
+	//[2], vex[3], vex[4], sq->color);
+	distance = distance_to_triangle(ray, &triangle);
+	if (distance > FLT_EPSILON)
+		return (distance);
+	triangle.first = vertex[2];
+	triangle.second = vertex[3];
+	triangle.third = vertex[0];
+//	((t_triangle *)tr->object)->point_a = vex[4];
+//	((t_triangle *)tr->object)->point_b = vex[5];
+//	((t_triangle *)tr->object)->point_c = vex[2];
+	distance = distance_to_triangle(ray, &triangle);
+	if (distance > FLT_EPSILON)
+		return (distance);
+	return (0);
+}
+
+void	add_square(t_all *scene, t_ray cntr_n_nrm, float size, t_rgb rgb)
+{
+	struct s_figure *square;
+
+	square = get_last_figure_of_scene(scene, rgb);
+	square->type = SQUARE;
+	square->get_distance = distance_to_square;
+	square->first = cntr_n_nrm.src;
+	square->normal = vector_norm(cntr_n_nrm.dir);
+	square->radius_or_size = size;
 }
