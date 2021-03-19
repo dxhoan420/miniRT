@@ -43,6 +43,7 @@ void	add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb)
 	triangle->third = two_three.dir;
 }
 
+//by Oumar Mimouni aka omimouni
 void	get_vertex(t_vec center, t_vec normal, float size, t_vec *vertex)
 {
 	t_vec	horizontal;
@@ -72,16 +73,13 @@ float	distance_to_square(t_ray ray, struct s_figure *square)
 	triangle.first = vertex[0];
 	triangle.second = vertex[1];
 	triangle.third = vertex[2];
-	//[2], vex[3], vex[4], sq->color);
 	distance = distance_to_triangle(ray, &triangle);
 	if (distance > FLT_EPSILON)
 		return (distance);
 	triangle.first = vertex[2];
 	triangle.second = vertex[3];
 	triangle.third = vertex[0];
-//	((t_triangle *)tr->object)->point_a = vex[4];
-//	((t_triangle *)tr->object)->point_b = vex[5];
-//	((t_triangle *)tr->object)->point_c = vex[2];
+
 	distance = distance_to_triangle(ray, &triangle);
 	if (distance > FLT_EPSILON)
 		return (distance);

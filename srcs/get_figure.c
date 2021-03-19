@@ -4,6 +4,19 @@
 
 #include "../hdrs/get_pixel_color.h"
 
+t_vec	get_cylinder_normal(struct s_figure cylinder)
+{
+	t_vec	pc;
+	t_vec	n;
+	float	h;
+
+	pc = vecs_subtraction(cylinder.hit, cylinder.first);
+	h = vecs_dot(pc, cylinder.second);
+	n = vecs_subtraction(pc, vec_multi(cylinder.second, h));
+	return (vector_norm(n));
+}
+
+//should replace normal computing in add_triangle;
 void	set_values(struct s_figure *figure, float dist, t_ray ray)
 {
 	t_vec	normal;
@@ -28,6 +41,8 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 		else
 			figure->normal = normal;
 	}
+	if (figure->type == CYLINDER)
+		figure->normal = get_cylinder_normal(*figure);
 }
 
 struct s_figure	*get_figure(t_ray ray, t_figures *figures, int first_or_closer)

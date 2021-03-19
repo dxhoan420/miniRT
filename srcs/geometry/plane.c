@@ -26,31 +26,11 @@ float	distance_to_plane(t_ray ray, struct s_figure *plane)
 
 void	add_plane(t_all *scene, t_vec point, t_vec norm, t_rgb rgb)
 {
-	struct s_figure	*new;
+	struct s_figure	*plane;
 
-	new = get_last_figure_of_scene(scene, rgb);
-	new->type = PLANE;
-	new->get_distance = distance_to_plane;
-	new->first = point;
-	new->normal = vector_norm(norm);
+	plane = get_last_figure_of_scene(scene, rgb);
+	plane->type = PLANE;
+	plane->get_distance = distance_to_plane;
+	plane->first = point;
+	plane->normal = vector_norm(norm);
 }
-
-//float	distance_to_square(t_ray ray, struct s_figure *square)
-//{
-//	float distance;
-//	float half_of_size;
-//
-//	distance = distance_to_plane(ray, square);
-//	if (distance > 0)
-//	{
-//		half_of_size = square->radius_or_size / 2;
-//		square->hit = vecs_add(ray.src, vec_multi(ray.dir, distance
-//							   * (1 - FLT_EPSILON * SHADOW_NOISE_REDUCTION)));
-//		if (fabsf(square->hit.x - square->first.x) <= half_of_size &&
-//				fabsf(square->hit.y - square->first.y) <= half_of_size &&
-//				fabsf(square->hit.z - square->first.z) <= half_of_size)
-//			return (distance);
-//	}
-//	return (0);
-//}
-
