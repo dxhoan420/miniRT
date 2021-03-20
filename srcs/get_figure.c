@@ -42,9 +42,12 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 		else
 			figure->normal = vec_multi(normal, -1);
 	}
-	if (figure->type == TRIANGLE)
+	if (figure->type == TRIANGLE || figure->type == CYLINDER)
 	{
-		normal = vector_norm(vecs_cross(
+		if (figure->type == CYLINDER)
+			normal = get_cylinder_normal(*figure);
+		else
+			normal = vector_norm(vecs_cross(
 				vecs_subtraction(figure->second, figure->first),
 				vecs_subtraction(figure->third, figure->first)));
 		if (vecs_dot(ray.dir, normal) > 0)
@@ -52,8 +55,6 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 		else
 			figure->normal = normal;
 	}
-	if (figure->type == CYLINDER)
-		figure->normal = get_cylinder_normal(*figure);
 }
 
 struct s_figure	*get_figure(t_ray ray, t_figures *figures, int first_or_closer)

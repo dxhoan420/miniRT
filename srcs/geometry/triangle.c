@@ -43,7 +43,7 @@ void	add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb)
 	triangle->third = two_three.dir;
 }
 
-//by Oumar Mimouni aka omimouni
+//origin by Oumar Mimouni aka omimouni, remake by me DXhoan
 void	get_vertex(t_vec center, t_vec normal, float size, t_vec *vertex)
 {
 	t_vec	horizontal;

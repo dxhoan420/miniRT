@@ -41,7 +41,7 @@ int main (int argc, char **argv)
 					create_vector(0, 0, 1), 90);
 //	add_light(&scene, create_vector(0, 2, 1),
 //				   create_rgb_norm(255, 255, 255, 0.4f));
-	add_light(&scene, create_vector(3, 0, -1),
+	add_light(&scene, create_vector(0, 0, -1),
 				   create_rgb_norm(255, 255, 255, 0.4f));
 //	add_light(&scene, create_vector(-5, 10, 0),
 //				   create_rgb_norm(255, 255, 255, 0.2f));
