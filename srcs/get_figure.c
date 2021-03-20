@@ -4,16 +4,27 @@
 
 #include "../hdrs/get_pixel_color.h"
 
-t_vec	get_cylinder_normal(struct s_figure cylinder)
-{
-	t_vec	pc;
-	t_vec	n;
-	float	h;
+//t_vec	set_cylinder_normal(struct s_figure cylinder)
+//{
+//	t_vec	pc;
+//	t_vec	n;
+//	float	h;
+//
+//	pc = vecs_subtraction(cylinder.hit, cylinder.first);
+//	h = vecs_dot(pc, cylinder.second);
+//	n = vecs_subtraction(pc, vec_multi(cylinder.second, h));
+//	return (vector_norm(n));
+//}
 
-	pc = vecs_subtraction(cylinder.hit, cylinder.first);
-	h = vecs_dot(pc, cylinder.second);
-	n = vecs_subtraction(pc, vec_multi(cylinder.second, h));
-	return (vector_norm(n));
+t_vec 		get_cylinder_normal(struct s_figure cylinder)
+{
+	t_vec ctp;
+	t_vec normal;
+
+	ctp = vecs_subtraction(cylinder.hit, cylinder.first);
+	normal = vecs_subtraction(ctp, vec_multi(cylinder.second,
+										vecs_dot(cylinder.second, ctp)));
+	return (vector_norm(normal));
 }
 
 //should replace normal computing in add_triangle;
