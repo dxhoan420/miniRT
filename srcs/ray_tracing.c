@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 2/24/21.
 //
 
-#include "../hdrs/miniRT.h"
+#include "miniRT.h"
 
 typedef struct s_viewport
 {
@@ -12,13 +12,13 @@ typedef struct s_viewport
 	float	y_pixel;
 }			t_viewport;
 
-t_viewport	get_viewport(int x_resolution, int y_resolution, int fov)
+t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
 {
 	t_viewport	viewport;
 	float		ratio;
 
 	ratio = (float) x_resolution / (float) y_resolution;
-	viewport.x_size = (float)(2 * tan((float)fov / 2 / 180 * M_PI));
+	viewport.x_size = (float)(2 * tan(fov / 2 / 180 * M_PI));
 	viewport.y_size = viewport.x_size / ratio;
 	viewport.x_pixel = viewport.x_size / (float) x_resolution;
 	viewport.y_pixel = viewport.y_size / (float) y_resolution;

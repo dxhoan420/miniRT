@@ -37,7 +37,7 @@ typedef struct s_camera
 {
 	t_vec			coordinates;
 	t_vec			norma_vector;
-	int				field_of_view;
+	float			field_of_view;
 	struct s_camera	*next;
 	struct s_camera	*prev;
 
@@ -82,9 +82,10 @@ void		add_plane(t_all *scene, t_vec point, t_vec norm, t_rgb rgb);
 void		add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb);
 void		add_square(t_all *scene, t_ray cntr_n_nrm, float size, t_rgb rgb);
 void		add_cylinder(t_all *scene, t_ray one_two, t_vec d_n_h, t_rgb rgb);
-void		add_camera(t_cameras **cams, t_vec point, t_vec normal, int fov);
+void		add_camera(t_cameras **cams, t_vec point, t_vec normal, float fov);
 void		add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm);
 void		render_scene(void *mlx, void *window, t_all scene);
 int			get_pixel_color(t_all scene, t_ray ray);
 t_figures	*get_last_figure_of_scene(t_all *scene, t_rgb rgb);
+void		parser (t_all *scene, t_cameras **cameras, char *filename);
 #endif

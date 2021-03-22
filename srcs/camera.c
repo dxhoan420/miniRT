@@ -2,10 +2,10 @@
 // Created by Demeter Xhoan on 2/20/21.
 //
 
-#include "../hdrs/miniRT.h"
+#include "miniRT.h"
 
 void	add_camera(t_cameras **cams, t_vec point,
-				   t_vec normal, int fov)
+				   t_vec normal, float fov)
 {
 	t_cameras	*iterator;
 	t_cameras	*new;
@@ -13,7 +13,7 @@ void	add_camera(t_cameras **cams, t_vec point,
 	iterator = *cams;
 	new = malloc(sizeof (t_cameras));
 	if (new == NULL)
-		exit(-1);
+		exit(-666);
 	new->coordinates = point;
 	new->norma_vector = normal;
 	new->field_of_view = fov;
@@ -50,7 +50,7 @@ void	add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm)
 	iterator = scene->lights;
 	new = malloc(sizeof(struct s_light));
 	if (new == NULL)
-		exit(-1);
+		exit(-666);
 	new->src = coordinates;
 	new->rgb_norm = rgb_norm;
 	new->next = NULL;

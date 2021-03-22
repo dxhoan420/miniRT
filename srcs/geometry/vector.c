@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 2/24/21.
 //
 
-#include "../../hdrs/vector.h"
+#include "vector.h"
 #include <math.h>
 
 t_vec	create_vector(float x, float y, float z)

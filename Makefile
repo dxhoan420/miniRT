@@ -13,12 +13,16 @@
 NAME	= miniRT
 
 SRCS	= $(addprefix srcs/, main.c camera.c ray_tracing.c color.c \
-							get_pixel_color.c get_figure.c $(GEOMETRY))
+							get_pixel_color.c get_figure.c $(GEOMETRY) $(PARSER))
+
+PARSER	= $(addprefix parser/, get_next_line.c get_next_line_utils.c parser.c\
+								choose_type.c parser_utils.c choose_figure.c)
 
 GEOMETRY= $(addprefix geometry/, vector.c vectors_operation.c sphere.c plane.c\
 								triangle.c cylinder.c)
 
-HDRS	= $(addprefix hdrs/, miniRT.h vector.h color.h get_pixel_color.h)
+HDRS	= $(addprefix hdrs/, miniRT.h vector.h color.h get_pixel_color.h\
+							get_next_line.h parser.h)
 
 OBJS	= $(SRCS:.c=.o)
 
@@ -26,7 +30,7 @@ LIBS	= -lmlx -framework OpenGL -framework AppKit
 
 all		: $(NAME)
 
-CFLAGS =  -Wall -Wextra -Werror -g ## убрать это -gовно
+CFLAGS =  -I./hdrs -Wall -Wextra -Werror -g ## убрать это -gовно
 
 $(NAME)	: $(OBJS) $(HDRS)
 	$(CC) -o $(NAME) $(OBJS) $(LIBS)

@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/14/21.
 //
 
-#include "../hdrs/get_pixel_color.h"
+#include "get_pixel_color.h"
 
 //t_vec	set_cylinder_normal(struct s_figure cylinder)
 //{
@@ -93,7 +93,7 @@ struct s_figure	*get_last_figure_of_scene(t_all *scene, t_rgb rgb)
 	iterator = scene->figures;
 	new = malloc(sizeof (struct s_figure));
 	if (new == NULL)
-		exit(-1);
+		exit(-666);
 	new->next = NULL;
 	new->rgb = rgb;
 	if (iterator != NULL)

@@ -5,7 +5,7 @@
 #ifndef GET_PIXEL_COLOR_H
 # define GET_PIXEL_COLOR_H
 
-# include "../hdrs/miniRT.h"
+# include "miniRT.h"
 # define CLOSER	0
 # define FIRST	1
 

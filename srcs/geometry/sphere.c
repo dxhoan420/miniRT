@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 2/20/21.
 //
 
-#include "../../hdrs/miniRT.h"
+#include "miniRT.h"
 
 float	distance_to_sphere(t_ray ray, struct s_figure *sphere)
 {

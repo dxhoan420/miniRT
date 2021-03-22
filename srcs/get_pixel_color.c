@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/14/21.
 //
 
-#include "../hdrs/get_pixel_color.h"
+#include "get_pixel_color.h"
 
 t_rgb	diffuse_color(struct s_light light, t_rgb color, t_vec normal)
 {

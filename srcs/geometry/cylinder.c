@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/19/21.
 //
 
-#include "../../hdrs/miniRT.h"
+#include "miniRT.h"
 
 //MWinter remake
 //float	set_cylinder_normal(struct s_figure *cylinder, t_ray ray, float

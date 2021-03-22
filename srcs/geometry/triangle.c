@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/16/21.
 //
 
-#include "../../hdrs/miniRT.h"
+#include "miniRT.h"
 
 //by Tomas Möller & Ben Trumbore
 float distance_to_triangle(t_ray ray, struct s_figure *triangle)

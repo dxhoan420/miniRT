@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hdrs/miniRT.h"
+#include "miniRT.h"
 
 int main (int argc, char **argv)
 {
@@ -19,30 +19,33 @@ int main (int argc, char **argv)
 	t_all 		scene;
 	t_cameras	*cameras = NULL;
 
-	if (argc != 3)
-		return (1);
-
-	scene.x_resolution = atoi(argv[1]);
-	scene.y_resolution = atoi(argv[2]);
-	scene.ambient_rgb_norm = create_rgb_norm(255, 255, 255, 0.2f);
+	if (argc > 1)
+		parser(&scene, &cameras, argv[1]);
+	exit(42);
+//	if (argc != 3)
+//		return (1);
+//
+//	scene.x_resolution = atoi(argv[1]);
+//	scene.y_resolution = atoi(argv[2]);
+//	scene.ambient_rgb_norm = create_rgb_norm(255, 255, 255, 0.1f);
 //	add_sphere(&scene, create_vector(-2, 1, 4), 1,create_rgb(WHITE));
 //	add_sphere(&scene, create_vector(1, -0.9f, 5), 2,create_rgb(WHITE));
 //	add_sphere(&scene, create_vector(0, 0, 7), 3,create_rgb(WHITE));
 //	add_sphere(&scene, create_vector(10, 0, 20), 20,create_rgb(WHITE));
-	add_plane(&scene, create_vector(0, 0, 200), create_vector(0, 0, -0.5f),
-		   create_rgb(RED));
+//	add_plane(&scene, create_vector(0, 0, 200), create_vector(0, 0, -0.5f),
+//		   create_rgb(BLUE));
 //	add_plane(&scene, create_vector(60, 0, 0), create_vector(1, 0.1f, 0),
 //		   create_rgb(GREEN));
 //	add_plane(&scene, create_vector(0, 1, 0), create_vector(0, -1, 0),
 //		   create_rgb(BLUE));
 //	add_plane(&scene, create_vector(0, -60, 0), create_vector(0, 1, 0.1f),
 //		   create_rgb(WHITE));
-	add_camera(&cameras, create_vector( 0, 0, -10),
-					create_vector(0, 0, 1), 90);
-//	add_light(&scene, create_vector(0, 2, 1),
+//	add_camera(&cameras, create_vector( 0, 0, -10),
+//					create_vector(0, 0, 1), 60);
+//	add_light(&scene, create_vector(30, 0, 1),
 //				   create_rgb_norm(255, 255, 255, 0.4f));
-	add_light(&scene, create_vector(0, 0, -1),
-				   create_rgb_norm(255, 255, 255, 0.4f));
+//	add_light(&scene, create_vector(0, 0, 0),
+//				   create_rgb_norm(255, 255, 255, 0.4f));
 //	add_light(&scene, create_vector(-5, 10, 0),
 //				   create_rgb_norm(255, 255, 255, 0.2f));
 //	add_light(&scene, create_vector(0, 4, -7),
@@ -60,10 +63,10 @@ int main (int argc, char **argv)
 //		   create_vector(1, -1, 4)),create_rgb(BLUE));
 //	add_square(&scene, create_ray(create_vector(0, 0, 4),
 //   create_vector(0, 1, 0)), 5, create_rgb(GREEN));
-	add_cylinder(&scene, create_ray(create_vector(0, 0, 0),
- create_vector(0.4f, 0,1)), create_vector(3, 4, 42), create_rgb(255,255,
-																  255));
-//	add_sphere(&scene, create_vector(-2, 1, 4), 0.3f,create_rgb(RED));
+//	add_cylinder(&scene, create_ray(create_vector(0, 0, 0),
+// create_vector(0.4f, 0,1)), create_vector(3, 4, 42), create_rgb(255,255,
+//																  255));
+//	add_sphere(&scene, create_vector(-0.2f, 0, 0.2f), 0.2f,create_rgb(RED));
 //	add_sphere(&scene, create_vector(-2, -1, 4), 0.3f,create_rgb(RED));
 //	add_sphere(&scene, create_vector(0, 1, 4), 0.3f,create_rgb(RED));
 //	add_sphere(&scene, create_vector(0, -1, 4), 0.3f,create_rgb(RED));

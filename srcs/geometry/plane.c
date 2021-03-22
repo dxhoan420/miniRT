@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/10/21.
 //
 
-#include "../../hdrs/miniRT.h"
+#include "miniRT.h"
 
 float	distance_to_plane(t_ray ray, struct s_figure *plane)
 {

@@ -2,7 +2,7 @@
 // Created by Demeter Xhoan on 3/17/21.
 //
 
-#include "../../hdrs/vector.h"
+#include "vector.h"
 
 t_vec	vecs_subtraction(t_vec subtract_from, t_vec to_subtract)
 {

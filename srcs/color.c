@@ -2,15 +2,23 @@
 // Created by Demeter Xhoan on 3/5/21.
 //
 
-#include "../hdrs/color.h"
+#include "color.h"
 
 t_rgb	create_rgb_norm(float r, float g, float b, float ratio)
 {
 	t_rgb	rgb;
 
+	if (ratio > 1)
+		ratio = 1;
 	rgb.r = ratio / 255 * r;
+	if (rgb.r > 1)
+		rgb.r = 1;
 	rgb.g = ratio / 255 * g;
+	if (rgb.g > 1)
+		rgb.g = 1;
 	rgb.b = ratio / 255 * b;
+	if (rgb.b > 1)
+		rgb.b = 1;
 	return (rgb);
 }
 
@@ -19,8 +27,14 @@ t_rgb	create_rgb(float r, float g, float b)
 	t_rgb	rgb;
 
 	rgb.r = r;
+	if (rgb.r > 255)
+		rgb.r = 255;
 	rgb.g = g;
+	if (rgb.g > 255)
+		rgb.g = 255;
 	rgb.b = b;
+	if (rgb.b > 255)
+		rgb.b = 255;
 	return (rgb);
 }
 
