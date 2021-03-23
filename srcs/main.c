@@ -21,7 +21,6 @@ int main (int argc, char **argv)
 
 	if (argc > 1)
 		parser(&scene, &cameras, argv[1]);
-	exit(42);
 //	if (argc != 3)
 //		return (1);
 //

@@ -18,7 +18,7 @@ void	set_screen_resolution(char *string, t_all *scene)
 		error("Negative resolution: need positive number", origin);
 }
 
-void	set_ambient(char *string, t_all *scene)
+char	*set_rgb(char *string, t_rgb *rgb, t_color_type type)
 {
 	char	*origin;
 	float	ratio;
@@ -27,9 +27,12 @@ void	set_ambient(char *string, t_all *scene)
 	float	b;
 
 	origin = string;
-	string = set_float(string, &ratio);
-	if (ratio > 1)
-		error("Ratio error", origin);
+	if (type == LIGHT)
+	{
+		string = set_float(string, &ratio);
+		if (ratio > 1)
+			error("Ratio error", origin);
+	}
 	string = set_float(string, &r);
 	if (r > 255)
 		error("Red channel overflow", origin);
@@ -39,52 +42,50 @@ void	set_ambient(char *string, t_all *scene)
 	string = set_float(string, &b);
 	if (b > 255)
 		error("Blue channel overflow", origin);
-	scene->ambient_rgb_norm = create_rgb_norm(r, g, b, ratio);
+	if (type == LIGHT)
+		*rgb = create_rgb_norm(r, g, b, ratio);
+	else
+		*rgb = create_rgb(r, g, b);
+	return (string);
 }
 
-void	set_camera(char *string, t_cameras **cameras)
+void	set_ambient(char *string, t_all *scene)
 {
-	char	*origin;
-	t_vec	coordinates;
-	t_vec	normal;
-	float	fov;
+	t_rgb rgb_norm;
 
-	origin = string;
-	string = set_vector(string, &coordinates, POINT);
-	string = set_vector(string, &normal, NORMAL);
-	string = set_float(string, &fov);
-	if (fov < 1)
-		error("Can't render for fov < 1", origin);
-	if (fov > 180)
-		error("MAX FOV = 180", origin);
-	add_camera(cameras, coordinates, normal, fov);
+	string = set_rgb(string, &rgb_norm, LIGHT);
+	scene->ambient_rgb_norm = rgb_norm;
 }
 
-char	type_check(t_all *scene, t_cameras **cameras, char *string)
+void	type_check(t_all *scene, t_cameras **cameras, char *string,
+						char *a_r_checks)
 {
-	char	type;
-
 	printf("%s\n", string);
 
+	if (*string == '#' || *string == '\0')
+		return;
 	if (*string == 'R')
 	{
+		if (a_r_checks[1] == *string)
+			error("Lines starting with R must appear once", string);
+		a_r_checks[1] = 'R';
 		set_screen_resolution(++string, scene);
-		return ('R');
 	}
 	else if (*string == 'A')
 	{
-		set_ambient(++string, scene);
-		return ('A');
+		if (a_r_checks[0] == *string)
+			error("Lines starting with A must appear once", string);
+		a_r_checks[0] = 'A';
+ 		set_ambient(++string, scene);
 	}
 	else if (*string == 'c')
 	{
 		if ((*(string + 1) >= '\t' && *(string + 1) <= '\r')
 				|| *(string + 1) == ' ')
-			set_camera(++string, cameras);
+			set_camera(string + 1, cameras);
 	}
 	else
 		set_other(string, scene);
-	return (*string);
 }
 
 void	parser (t_all *scene, t_cameras **cameras, char *filename)
@@ -94,21 +95,17 @@ void	parser (t_all *scene, t_cameras **cameras, char *filename)
 	char *string;
 	char a_r_checks[3];
 
-	a_r_checks[1] = '2';
-	a_r_checks[2] = '1';
+	a_r_checks[0] = '2';
+	a_r_checks[1] = '1';
+	a_r_checks[2] = '\0';
 	fd = open(filename, O_RDONLY);
 	if (fd  == -1)
 		error("Can't open file for read", filename);
 	have_found_new_line = get_next_line(fd, &string);
 	while (have_found_new_line)
 	{
-		a_r_checks[0] = type_check(scene, cameras, string);
-		if (a_r_checks[0] == a_r_checks[1] || a_r_checks[0] == a_r_checks[2])
-			error("Lines starting with A or R must appear once", string);
-		if (a_r_checks[0] == 'A')
-			a_r_checks[1] = 'A';
-		if (a_r_checks[0] == 'R')
-			a_r_checks[2] = 'R';
+		type_check(scene, cameras, string, a_r_checks);
+		free(string);
 		have_found_new_line = get_next_line(fd, &string);
 	}
 	if (a_r_checks[1] == '2' || a_r_checks[2] == '1')

@@ -13,11 +13,13 @@ void	error(char *message, char *place)
 char 	*skip_and_set_sign(char *str, float *positive)
 {
 	*positive = 1;
-	while (((*str >= '\t' && *str <= '\r') || *str == ' ') && *str != '\0')
+	while (((*str >= '\t' && *str <= '\r') || *str == ' ' || *str == ',')
+					&& *str != '\0')
 		str++;
-	while (*str == '-')
+	while (*str == '-' || *str == '+')
 	{
-		*positive *= -1;
+		if (*str == '-')
+			*positive *= -1;
 		str++;
 	}
 	return (str);
@@ -42,8 +44,10 @@ char	*set_float(char *str, float *result)
 	while ((*str >= '0' && *str <= '9') && *str != '\0')
 		*result = *result * 10 + (float)(*str++ - '0');
 	if (*str != '.')
+	{
+		*result *= positive;
 		return (check_origin_to_current(origin, str));
-	else
+	}
 		str++;
 	power = 0;
 	while ((*str >= '0' && *str <= '9') && *str != '\0')
@@ -52,7 +56,7 @@ char	*set_float(char *str, float *result)
 		*result = *result * 10 + (float)(*str++ - '0');
 	}
 	if (power > 0)
-		*result = powf(*result, -power);
+		*result = *result / powf(10, power) * positive;
 	return (check_origin_to_current(origin, str));
 }
 
@@ -79,4 +83,5 @@ char	*set_vector(char *string, t_vec *vector, t_vector_type type)
 		if (z < -1 || z > 1)
 			error("Z coordinate should be [-1, 1] for normal", origin);
 	}
+	return (string);
 }
