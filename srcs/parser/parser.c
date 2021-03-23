@@ -11,11 +11,13 @@ void	set_screen_resolution(char *string, t_all *scene)
 
 	origin = string;
 	string = set_float(string, &temp);
-	scene->x_resolution = (int)temp;
+	scene->x_res = (int)temp;
 	string = set_float(string, &temp);
-	scene->y_resolution = (int)temp;
-	if (scene->x_resolution <= 0 || scene->y_resolution <= 0)
+	scene->y_res = (int)temp;
+	if (scene->x_res <= 0 || scene->y_res <= 0)
 		error("Negative resolution: need positive number", origin);
+	if (scene->x_res > 16384 || scene->y_res > 16384)
+		error("Maximum allowed size is 16384", origin);
 }
 
 char	*set_rgb(char *string, t_rgb *rgb, t_color_type type)
@@ -69,19 +71,18 @@ void	type_check(t_all *scene, t_cameras **cameras, char *string,
 		if (a_r_checks[1] == *string)
 			error("Lines starting with R must appear once", string);
 		a_r_checks[1] = 'R';
-		set_screen_resolution(++string, scene);
+		set_screen_resolution(string + 1, scene);
 	}
 	else if (*string == 'A')
 	{
 		if (a_r_checks[0] == *string)
 			error("Lines starting with A must appear once", string);
 		a_r_checks[0] = 'A';
- 		set_ambient(++string, scene);
+ 		set_ambient(string + 1, scene);
 	}
-	else if (*string == 'c')
+	else if (*string == 'c' && ((*(string + 1) >= '\t' && *(string + 1) <= '\r')
+								|| *(string + 1) == ' '))
 	{
-		if ((*(string + 1) >= '\t' && *(string + 1) <= '\r')
-				|| *(string + 1) == ' ')
 			set_camera(string + 1, cameras);
 	}
 	else
@@ -95,6 +96,7 @@ void	parser (t_all *scene, t_cameras **cameras, char *filename)
 	char *string;
 	char a_r_checks[3];
 
+	//need to check filename for .rt
 	a_r_checks[0] = '2';
 	a_r_checks[1] = '1';
 	a_r_checks[2] = '\0';
@@ -108,6 +110,8 @@ void	parser (t_all *scene, t_cameras **cameras, char *filename)
 		free(string);
 		have_found_new_line = get_next_line(fd, &string);
 	}
+	type_check(scene, cameras, string, a_r_checks);
+	free(string);
 	if (a_r_checks[1] == '2' || a_r_checks[2] == '1')
 		error("No lines starting with A or R", filename);
 	close(fd);

@@ -36,8 +36,8 @@ typedef enum e_side
 typedef struct s_camera
 {
 	t_vec			coordinates;
-	t_vec			norma_vector;
-	float			field_of_view;
+	t_vec			orient_vector;
+	float			fov;
 	struct s_camera	*next;
 	struct s_camera	*prev;
 
@@ -69,8 +69,8 @@ typedef struct s_figure
 
 typedef struct s_all
 {
-	int				x_resolution;
-	int				y_resolution;
+	int				x_res;
+	int				y_res;
 	t_rgb			ambient_rgb_norm;
 	t_cameras		camera;
 	t_lights		*lights;

@@ -9,17 +9,17 @@
 # include "miniRT.h"
 # include <fcntl.h>
 
-typedef enum	e_vector_type
+typedef enum e_vector_type
 {
 	POINT,
 	NORMAL
-}				t_vector_type;
+}			t_vector_type;
 
-typedef enum	e_color_type
+typedef enum e_color_type
 {
 	LIGHT,
 	FIGURE
-}				t_color_type;
+}			t_color_type;
 
 void	set_other(char *string, t_all *scene);
 char	*set_vector(char *string, t_vec *vector, t_vector_type type);

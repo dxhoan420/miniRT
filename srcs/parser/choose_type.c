@@ -29,6 +29,8 @@ void	set_camera(char *string, t_cameras **cameras)
 		error("Can't render for fov < 1", origin);
 	if (fov > 180)
 		error("MAX FOV = 180", origin);
+	if (normal.x == 0 && normal.z == 0)
+		error("Can't compute picture with such camera orientation", origin);
 	add_camera(cameras, coordinates, normal, fov);
 }
 

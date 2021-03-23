@@ -4,30 +4,17 @@
 
 #include "get_pixel_color.h"
 
-//t_vec	set_cylinder_normal(struct s_figure cylinder)
-//{
-//	t_vec	pc;
-//	t_vec	n;
-//	float	h;
-//
-//	pc = vecs_subtraction(cylinder.hit, cylinder.first);
-//	h = vecs_dot(pc, cylinder.second);
-//	n = vecs_subtraction(pc, vec_multi(cylinder.second, h));
-//	return (vector_norm(n));
-//}
-
-t_vec 		get_cylinder_normal(struct s_figure cylinder)
+t_vec	get_cylinder_normal(struct s_figure cylinder)
 {
-	t_vec ctp;
-	t_vec normal;
+	t_vec	ctp;
+	t_vec	normal;
 
 	ctp = vecs_subtraction(cylinder.hit, cylinder.first);
 	normal = vecs_subtraction(ctp, vec_multi(cylinder.second,
-										vecs_dot(cylinder.second, ctp)));
+				vecs_dot(cylinder.second, ctp)));
 	return (vector_norm(normal));
 }
 
-//should replace normal computing in add_triangle;
 void	set_values(struct s_figure *figure, float dist, t_ray ray)
 {
 	t_vec	normal;
@@ -48,8 +35,8 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 			normal = get_cylinder_normal(*figure);
 		else
 			normal = vector_norm(vecs_cross(
-				vecs_subtraction(figure->second, figure->first),
-				vecs_subtraction(figure->third, figure->first)));
+						vecs_subtraction(figure->second, figure->first),
+						vecs_subtraction(figure->third, figure->first)));
 		if (vecs_dot(ray.dir, normal) > 0)
 			figure->normal = vec_multi(normal, -1);
 		else

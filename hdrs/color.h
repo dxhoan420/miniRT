@@ -4,11 +4,6 @@
 
 #ifndef COLOR_H
 # define COLOR_H
-//colors for debugging
-# define GREEN	0,255,0
-# define BLUE	0,0,255
-# define RED		255,0,0
-# define WHITE	255,255,255
 
 typedef struct s_rgb
 {

@@ -15,8 +15,8 @@ void	add_camera(t_cameras **cams, t_vec point,
 	if (new == NULL)
 		exit(-666);
 	new->coordinates = point;
-	new->norma_vector = normal;
-	new->field_of_view = fov;
+	new->orient_vector = vector_norm(normal);
+	new->fov = fov;
 	new->next = NULL;
 	if (iterator != NULL)
 	{
@@ -26,20 +26,6 @@ void	add_camera(t_cameras **cams, t_vec point,
 	}
 	else
 		*cams = new;
-}
-
-t_vec	cam_dir(t_vec origin, t_vec mz)
-{
-	t_vec	mx;
-	t_vec	my;
-	t_vec	result_ray;
-
-	mx = vecs_cross(create_vector(0, 1, 0), mz);
-	my = vecs_cross(mz, mx);
-	result_ray.x = origin.x * mx.x + origin.y * mx.y + origin.z * mx.z;
-	result_ray.y = origin.x * my.x + origin.y * my.y + origin.z * my.z;
-	result_ray.z = origin.x * mz.x + origin.y * mz.y + origin.z * mz.z;
-	return (result_ray);
 }
 
 void	add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm)

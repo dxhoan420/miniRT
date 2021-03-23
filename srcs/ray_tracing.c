@@ -25,30 +25,46 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
 	return (viewport);
 }
 
+t_vec	get_orient_dir(t_vec origin, t_vec tz)
+{
+	t_vec	tx;
+	t_vec	ty;
+	t_vec	result_ray;
+
+	tz.x *= -1;
+	tz.y *= -1;
+	tx = vector_norm(vecs_cross(create_vector(0, 1, 0), tz));
+	ty = vector_norm(vecs_cross(tz, tx));
+	result_ray.x = origin.x * tx.x + origin.y * tx.y + origin.z * tx.z;
+	result_ray.y = origin.x * ty.x + origin.y * ty.y + origin.z * ty.z;
+	result_ray.z = origin.x * tz.x + origin.y * tz.y + origin.z * tz.z;
+	return (vector_norm(result_ray));
+}
+
 void	render_scene(void *mlx, void *window, t_all scene)
 {
 	int			mlx_x;
 	int			mlx_y;
-	t_vec		ray;
+	t_vec		dir;
 	t_viewport	viewport;
 
-	viewport = get_viewport(scene.x_resolution, scene.y_resolution,
-			 scene.camera.field_of_view);
-	ray.z = 1;
-	ray.y = (float)scene.y_resolution / 2 * viewport.y_pixel;
+	viewport = get_viewport(scene.x_res, scene.y_res, scene.camera.fov);
+	dir.z = 1;
+	dir.y = (float)scene.y_res / 2 * viewport.y_pixel;
 	mlx_y = 0;
-	while (mlx_y < scene.y_resolution)
+	while (mlx_y < scene.y_res)
 	{
-		ray.x = (-(float)scene.x_resolution / 2) * viewport.x_pixel;
+		dir.x = (-(float)scene.x_res / 2) * viewport.x_pixel;
 		mlx_x = 0;
-		while (mlx_x < scene.x_resolution)
+		while (mlx_x < scene.x_res)
 		{
-			mlx_pixel_put(mlx, window, mlx_x, mlx_y, get_pixel_color(scene,
-				create_ray(scene.camera.coordinates, vector_norm(ray))));
-			ray.x += viewport.x_pixel;
+			mlx_pixel_put(mlx, window, mlx_x, mlx_y,
+				 get_pixel_color(scene, create_ray(scene.camera.coordinates,
+						   get_orient_dir(dir, scene.camera.orient_vector))));
+			dir.x += viewport.x_pixel;
 			mlx_x++;
 		}
-		ray.y -= viewport.y_pixel;
+		dir.y -= viewport.y_pixel;
 		mlx_y++;
 	}
 }
