@@ -17,15 +17,18 @@ void	add_camera(t_cameras **cams, t_vec point,
 	new->coordinates = point;
 	new->orient_vector = vector_norm(normal);
 	new->fov = fov;
-	new->next = NULL;
 	if (iterator != NULL)
 	{
-		while (iterator->next != NULL)
+		while (iterator->next != NULL && iterator->next != *cams)
 			iterator = iterator->next;
 		iterator->next = new;
+		new->next = *cams;
 	}
 	else
+	{
 		*cams = new;
+		new->next = NULL;
+	}
 }
 
 void	add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm)

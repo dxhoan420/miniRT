@@ -12,19 +12,41 @@
 
 #include "miniRT.h"
 
+typedef struct s_engine_scene_cams
+{
+	t_mlx		*engine;
+	t_all		*scene;
+	t_cameras	*cameras;
+}				t_esc;
+
+int	window_close(t_mlx *engine)
+{
+	mlx_clear_window(engine->mlx, engine->win);
+	mlx_destroy_window(engine->mlx, engine->win);
+	exit(0);
+}
+
+int	key_hook(int keycode, t_mlx *engine)
+{
+	if (keycode == 53)
+		window_close(engine);
+	return (keycode);
+}
+
 int	main (int argc, char **argv)
 {
-	void		*mlx;
-	void		*window;
+	t_mlx		engine;
 	t_all		scene;
 	t_cameras	*cameras = NULL;
 
 	if (argc > 1)
 		parser(&scene, &cameras, argv[1]);
-	mlx = mlx_init();
+	engine.mlx = mlx_init();
 	scene.camera = *cameras;
-	window = mlx_new_window(mlx, scene.x_res, scene.y_res, "OK");
-	render_scene(mlx, window, scene);
-	mlx_loop(mlx);
+	engine.win = mlx_new_window(engine.mlx, scene.x_res, scene.y_res, "OK");
+	render_scene(engine, scene);
+	mlx_key_hook(engine.win, key_hook, &engine);
+	mlx_hook(engine.win, 17, 0L, window_close, &engine);
+	mlx_loop(engine.mlx);
 	return (0);
 }
