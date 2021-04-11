@@ -14,7 +14,7 @@ void	set_light(char *string, t_all *scene)
 	add_light(scene, coordinates, rgb_norm);
 }
 
-void	set_camera(char *string, t_cameras **cameras)
+void	set_camera(char *string, t_all *scene)
 {
 	char	*origin;
 	t_vec	coordinates;
@@ -31,7 +31,7 @@ void	set_camera(char *string, t_cameras **cameras)
 		error("MAX FOV = 180", origin);
 	if (normal.x == 0 && normal.z == 0)
 		error("Can't compute picture with such camera orientation", origin);
-	add_camera(cameras, coordinates, normal, fov);
+	add_camera(scene, coordinates, normal, fov);
 }
 
 void	set_other(char *string, t_all *scene)

@@ -4,13 +4,12 @@
 
 #include "miniRT.h"
 
-void	add_camera(t_cameras **cams, t_vec point,
-				   t_vec normal, float fov)
+void	add_camera(t_all *scene, t_vec point, t_vec normal, float fov)
 {
 	t_cameras	*iterator;
 	t_cameras	*new;
 
-	iterator = *cams;
+	iterator = scene->cameras;
 	new = malloc(sizeof (t_cameras));
 	if (new == NULL)
 		exit(-666);
@@ -19,15 +18,18 @@ void	add_camera(t_cameras **cams, t_vec point,
 	new->fov = fov;
 	if (iterator != NULL)
 	{
-		while (iterator->next != NULL && iterator->next != *cams)
+		while (iterator->next != NULL && iterator->next != scene->cameras)
 			iterator = iterator->next;
 		iterator->next = new;
-		new->next = *cams;
+		new->next = scene->cameras;
+		scene->cameras->prev = new;
+		new->prev = iterator;
 	}
 	else
 	{
-		*cams = new;
+		scene->cameras = new;
 		new->next = NULL;
+		new->prev = NULL;
 	}
 }
 

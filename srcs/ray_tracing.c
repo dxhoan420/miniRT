@@ -41,14 +41,14 @@ t_vec	get_orient_dir(t_vec origin, t_vec tz)
 	return (vector_norm(result_ray));
 }
 
-void	render_scene(t_mlx engine, t_all scene)
+void	render_scene(t_all scene)
 {
 	int			mlx_x;
 	int			mlx_y;
 	t_vec		dir;
 	t_viewport	viewport;
 
-	viewport = get_viewport(scene.x_res, scene.y_res, scene.camera.fov);
+	viewport = get_viewport(scene.x_res, scene.y_res, scene.cameras->fov);
 	dir.z = 1;
 	dir.y = (float)scene.y_res / 2 * viewport.y_pixel;
 	mlx_y = 0;
@@ -58,9 +58,9 @@ void	render_scene(t_mlx engine, t_all scene)
 		mlx_x = 0;
 		while (mlx_x < scene.x_res)
 		{
-			mlx_pixel_put(engine.mlx, engine.win, mlx_x, mlx_y,
-				 get_pixel_color(scene, create_ray(scene.camera.coordinates,
-						   get_orient_dir(dir, scene.camera.orient_vector))));
+			mlx_pixel_put(scene.engine.mlx, scene.engine.win, mlx_x, mlx_y,
+				 get_pixel_color(scene, create_ray(scene.cameras->coordinates,
+					   get_orient_dir(dir, scene.cameras->orient_vector))));
 			dir.x += viewport.x_pixel;
 			mlx_x++;
 		}

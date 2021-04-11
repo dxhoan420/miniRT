@@ -59,8 +59,7 @@ void	set_ambient(char *string, t_all *scene)
 	scene->ambient_rgb_norm = rgb_norm;
 }
 
-void	type_check(t_all *scene, t_cameras **cameras, char *string,
-						char *a_r_checks)
+void	type_check(t_all *scene, char *string, char *a_r_checks)
 {
 	printf("%s\n", string);
 
@@ -82,14 +81,12 @@ void	type_check(t_all *scene, t_cameras **cameras, char *string,
 	}
 	else if (*string == 'c' && ((*(string + 1) >= '\t' && *(string + 1) <= '\r')
 								|| *(string + 1) == ' '))
-	{
-			set_camera(string + 1, cameras);
-	}
+			set_camera(string + 1, scene);
 	else
 		set_other(string, scene);
 }
 
-void	parser (t_all *scene, t_cameras **cameras, char *filename)
+void	parser (t_all *scene, char *filename)
 {
 	int fd;
 	int have_found_new_line;
@@ -106,11 +103,11 @@ void	parser (t_all *scene, t_cameras **cameras, char *filename)
 	have_found_new_line = get_next_line(fd, &string);
 	while (have_found_new_line)
 	{
-		type_check(scene, cameras, string, a_r_checks);
+		type_check(scene, string, a_r_checks);
 		free(string);
 		have_found_new_line = get_next_line(fd, &string);
 	}
-	type_check(scene, cameras, string, a_r_checks);
+	type_check(scene, string, a_r_checks);
 	free(string);
 	if (a_r_checks[1] == '2' || a_r_checks[2] == '1')
 		error("No lines starting with A or R", filename);

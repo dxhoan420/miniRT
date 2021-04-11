@@ -30,7 +30,7 @@ void	set_plane(char *string, t_all *scene);
 void	set_triangle(char *string, t_all *scene);
 void	set_square(char *string, t_all *scene);
 void	set_cylinder(char *string, t_all *scene);
-void	set_camera(char *string, t_cameras **cameras);
+void	set_camera(char *string, t_all *scene);
 char	*set_rgb(char *string, t_rgb *rgb, t_color_type type);
 
 #endif
