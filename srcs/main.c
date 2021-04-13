@@ -17,11 +17,6 @@ enum e_direction {
 	FORWARD
 };
 
-//enum e_screenshot {
-//	JUSTRENDER,
-//	SAVEBMP
-//};
-
 int	window_close(t_all *scene)
 {
 	mlx_clear_window(scene->engine.mlx, scene->engine.win);
@@ -37,7 +32,7 @@ int	change_camera(t_all *scene, enum e_direction direction)
 		scene->cameras = scene->cameras->next;
 	if (direction == BACKWARD)
 		scene->cameras = scene->cameras->prev;
-	render_scene(*scene, 0, NULL);
+	render_scene(*scene, NULL);
 	return (direction);
 }
 
@@ -67,7 +62,6 @@ int has_rt(char *filename)
 int	main (int argc, char **argv)
 {
 	t_all		scene;
-	int			*picture;
 
 	if (argc < 2)
 		return (0);
@@ -75,17 +69,15 @@ int	main (int argc, char **argv)
 		error("WRONG FILE EXTENSION: need *.rt files", argv[1]);
 	parser(&scene, argv[1]);
 	if (argc > 2)
-	{
-		picture = malloc(scene.x_res * scene.y_res * sizeof(int));
-		if (picture == NULL)
-			error("Picture memory allocation failed", argv[1]);
-		render_scene(scene, 1, picture);
-		start_bmp(argv[1], argv[2], scene, picture);
-	}
+		start_bmp_n_exit(argv[1], argv[2], scene);
+	if (scene.x_res > WIDTH)
+		scene.x_res = WIDTH;
+	if (scene.y_res > HEIGHT)
+		scene.y_res = HEIGHT;
 	scene.engine.mlx = mlx_init();
 	scene.engine.win = mlx_new_window(scene.engine.mlx,
 									scene.x_res, scene.y_res, "miniRT");
-	render_scene(scene, 0, NULL);
+	render_scene(scene, NULL);
 	mlx_key_hook(scene.engine.win, key_hook, &scene);
 	mlx_hook(scene.engine.win, 17, 0L, window_close, &scene);
 	mlx_loop(scene.engine.mlx);

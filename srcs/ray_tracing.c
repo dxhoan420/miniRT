@@ -11,7 +11,7 @@ typedef struct s_viewport
 	float	x_pixel;
 	float	y_pixel;
 	int		mlx_x;
-	int		mlx_y;
+	int 	mlx_y;
 	t_vec	dir;
 }			t_viewport;
 
@@ -27,7 +27,7 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
 	viewport.y_pixel = viewport.y_size / (float) y_resolution;
 	viewport.dir.z = 1;
 	viewport.dir.y = (float)y_resolution / 2 * viewport.y_pixel;
-	viewport.mlx_y = 0;
+
 	return (viewport);
 }
 
@@ -47,33 +47,35 @@ t_vec	get_orient_dir(t_vec origin, t_vec tz)
 	return (vector_norm(result_ray));
 }
 
-int	mlx_or_bmp(t_all scene, t_vec cam_dir)
+void	mlx_or_bmp(t_all scene, t_viewport	viewport, int *picture)
 {
-	int color;
+	int		color;
+	t_ray	ray;
 
-	cam_dir = get_orient_dir(cam_dir, scene.cameras->orient);
-	color = get_pixel_color(scene, create_ray(scene.cameras->point, cam_dir));
-	return (color);
+	viewport.dir = get_orient_dir(viewport.dir, scene.cameras->orient);
+	ray = create_ray(scene.cameras->point, viewport.dir);
+	color = get_pixel_color(scene, ray);
+	if (!picture)
+		mlx_pixel_put(scene.engine.mlx, scene.engine.win,
+					  viewport.mlx_x, viewport.mlx_y,color);
+	else
+		picture[(scene.y_res - viewport.mlx_y) *
+				scene.x_res - (scene.x_res - viewport.mlx_x)] = color;
 }
 
-void	render_scene(t_all scene, int bmp, int *picture)
+void	render_scene(t_all scene, int *picture)
 {
 	t_viewport	viewport;
-	int			color;
 
 	viewport = get_viewport(scene.x_res, scene.y_res, scene.cameras->fov);
+	viewport.mlx_y = 0;
 	while (viewport.mlx_y < scene.y_res)
 	{
 		viewport.dir.x = (-(float)scene.x_res / 2) * viewport.x_pixel;
 		viewport.mlx_x = 0;
 		while (viewport.mlx_x < scene.x_res)
 		{
-			color = mlx_or_bmp(scene, viewport.dir);
-			if (!bmp)
-				mlx_pixel_put(scene.engine.mlx, scene.engine.win,
-								 viewport.mlx_x, viewport.mlx_y,color);
-			else
-				picture[viewport.mlx_x + viewport.mlx_y * scene.x_res] = color;
+			mlx_or_bmp(scene, viewport, picture);
 			viewport.dir.x += viewport.x_pixel;
 			viewport.mlx_x++;
 		}

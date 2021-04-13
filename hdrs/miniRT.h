@@ -15,6 +15,8 @@
 # include "vector.h"
 # include "color.h"
 
+# define WIDTH 1920
+# define HEIGHT 1080
 # define SHINE	250
 //100000 minimum for dark scene
 # define SHADOW_NOISE_REDUCTION	100000
@@ -92,10 +94,10 @@ void		add_square(t_all *scene, t_ray cntr_n_nrm, float size, t_rgb rgb);
 void		add_cylinder(t_all *scene, t_ray one_two, t_vec d_n_h, t_rgb rgb);
 void		add_camera(t_all *scene, t_vec point, t_vec normal, float fov);
 void		add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm);
-void		render_scene(t_all scene, int bmp, int *picture);
+void		render_scene(t_all scene, int *picture);
 int			get_pixel_color(t_all scene, t_ray ray);
 t_figures	*get_last_figure_of_scene(t_all *scene, t_rgb rgb);
 void		parser (t_all *scene, char *rt_filename);
 void		error(char *message, char *place);
-void		start_bmp(char *rt_filename, char *save, t_all scene, int *picture);
+void		start_bmp_n_exit(char *rt_filename, char *save, t_all scene);
 #endif

@@ -96,9 +96,10 @@ void header_write(int fd, int x_res, int y_res)
 	write(fd, header, 54);
 }
 
-void start_bmp(char *rt_filename, char *save, t_all scene, int *picture)
+void start_bmp_n_exit(char *rt_filename, char *save, t_all scene)
 {
 	int		fd;
+	int		*picture;
 	char	*bmp_filename;
 
 	if (save[0] == save[1] && save[1] == '-' && save[2] == 's'
@@ -112,6 +113,10 @@ void start_bmp(char *rt_filename, char *save, t_all scene, int *picture)
 	if (fd == -1)
 		error("Can't open output file", bmp_filename);
 	free(bmp_filename);
+	picture = malloc(scene.x_res * scene.y_res * 4);
+	if (picture == NULL)
+		error("Picture memory allocation failed", rt_filename);
+	render_scene(scene, picture);
 	header_write(fd, scene.x_res, scene.y_res);
 	write(fd, picture, scene.x_res * scene.y_res * 4);
 	exit(0);
