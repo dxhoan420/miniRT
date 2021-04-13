@@ -20,37 +20,6 @@ void	set_screen_resolution(char *string, t_all *scene)
 		error("Maximum allowed size is 16384", origin);
 }
 
-char	*set_rgb(char *string, t_rgb *rgb, t_color_type type)
-{
-	char	*origin;
-	float	ratio;
-	float	r;
-	float	g;
-	float	b;
-
-	origin = string;
-	if (type == LIGHT)
-	{
-		string = set_float(string, &ratio);
-		if (ratio > 1)
-			error("Ratio error", origin);
-	}
-	string = set_float(string, &r);
-	if (r > 255)
-		error("Red channel overflow", origin);
-	string = set_float(string, &g);
-	if (g > 255)
-		error("Green channel overflow", origin);
-	string = set_float(string, &b);
-	if (b > 255)
-		error("Blue channel overflow", origin);
-	if (type == LIGHT)
-		*rgb = create_rgb_norm(r, g, b, ratio);
-	else
-		*rgb = create_rgb(r, g, b);
-	return (string);
-}
-
 void	set_ambient(char *string, t_all *scene)
 {
 	t_rgb rgb_norm;
@@ -86,20 +55,20 @@ void	type_check(t_all *scene, char *string, char *a_r_checks)
 		set_other(string, scene);
 }
 
-void	parser (t_all *scene, char *filename)
+void	parser (t_all *scene, char *rt_filename)
 {
 	int fd;
 	int have_found_new_line;
 	char *string;
 	char a_r_checks[3];
 
-	//need to check filename for .rt
+	//need to check rt_filename for .rt
 	a_r_checks[0] = '2';
 	a_r_checks[1] = '1';
 	a_r_checks[2] = '\0';
-	fd = open(filename, O_RDONLY);
+	fd = open(rt_filename, O_RDONLY);
 	if (fd  == -1)
-		error("Can't open file for read", filename);
+		error("Can't open file for read", rt_filename);
 	have_found_new_line = get_next_line(fd, &string);
 	while (have_found_new_line)
 	{
@@ -110,6 +79,6 @@ void	parser (t_all *scene, char *filename)
 	type_check(scene, string, a_r_checks);
 	free(string);
 	if (a_r_checks[1] == '2' || a_r_checks[2] == '1')
-		error("No lines starting with A or R", filename);
+		error("No lines starting with A or R", rt_filename);
 	close(fd);
 }

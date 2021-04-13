@@ -10,6 +10,9 @@ typedef struct s_viewport
 	float	y_size;
 	float	x_pixel;
 	float	y_pixel;
+	int		mlx_x;
+	int		mlx_y;
+	t_vec	dir;
 }			t_viewport;
 
 t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
@@ -22,6 +25,9 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
 	viewport.y_size = viewport.x_size / ratio;
 	viewport.x_pixel = viewport.x_size / (float) x_resolution;
 	viewport.y_pixel = viewport.y_size / (float) y_resolution;
+	viewport.dir.z = 1;
+	viewport.dir.y = (float)y_resolution / 2 * viewport.y_pixel;
+	viewport.mlx_y = 0;
 	return (viewport);
 }
 
@@ -41,30 +47,37 @@ t_vec	get_orient_dir(t_vec origin, t_vec tz)
 	return (vector_norm(result_ray));
 }
 
-void	render_scene(t_all scene)
+int	mlx_or_bmp(t_all scene, t_vec cam_dir)
 {
-	int			mlx_x;
-	int			mlx_y;
-	t_vec		dir;
+	int color;
+
+	cam_dir = get_orient_dir(cam_dir, scene.cameras->orient);
+	color = get_pixel_color(scene, create_ray(scene.cameras->point, cam_dir));
+	return (color);
+}
+
+void	render_scene(t_all scene, int bmp, int *picture)
+{
 	t_viewport	viewport;
+	int			color;
 
 	viewport = get_viewport(scene.x_res, scene.y_res, scene.cameras->fov);
-	dir.z = 1;
-	dir.y = (float)scene.y_res / 2 * viewport.y_pixel;
-	mlx_y = 0;
-	while (mlx_y < scene.y_res)
+	while (viewport.mlx_y < scene.y_res)
 	{
-		dir.x = (-(float)scene.x_res / 2) * viewport.x_pixel;
-		mlx_x = 0;
-		while (mlx_x < scene.x_res)
+		viewport.dir.x = (-(float)scene.x_res / 2) * viewport.x_pixel;
+		viewport.mlx_x = 0;
+		while (viewport.mlx_x < scene.x_res)
 		{
-			mlx_pixel_put(scene.engine.mlx, scene.engine.win, mlx_x, mlx_y,
-				 get_pixel_color(scene, create_ray(scene.cameras->coordinates,
-					   get_orient_dir(dir, scene.cameras->orient_vector))));
-			dir.x += viewport.x_pixel;
-			mlx_x++;
+			color = mlx_or_bmp(scene, viewport.dir);
+			if (!bmp)
+				mlx_pixel_put(scene.engine.mlx, scene.engine.win,
+								 viewport.mlx_x, viewport.mlx_y,color);
+			else
+				picture[viewport.mlx_x + viewport.mlx_y * scene.x_res] = color;
+			viewport.dir.x += viewport.x_pixel;
+			viewport.mlx_x++;
 		}
-		dir.y -= viewport.y_pixel;
-		mlx_y++;
+		viewport.dir.y -= viewport.y_pixel;
+		viewport.mlx_y++;
 	}
 }

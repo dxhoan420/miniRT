@@ -10,6 +10,7 @@
 # include <stdio.h>
 # include <math.h>
 # include <float.h>
+# include <fcntl.h>
 
 # include "vector.h"
 # include "color.h"
@@ -41,8 +42,8 @@ typedef struct s_mlx
 
 typedef struct s_camera
 {
-	t_vec			coordinates;
-	t_vec			orient_vector;
+	t_vec			point;
+	t_vec			orient;
 	float			fov;
 	struct s_camera	*next;
 	struct s_camera	*prev;
@@ -91,8 +92,10 @@ void		add_square(t_all *scene, t_ray cntr_n_nrm, float size, t_rgb rgb);
 void		add_cylinder(t_all *scene, t_ray one_two, t_vec d_n_h, t_rgb rgb);
 void		add_camera(t_all *scene, t_vec point, t_vec normal, float fov);
 void		add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm);
-void		render_scene(t_all scene);
+void		render_scene(t_all scene, int bmp, int *picture);
 int			get_pixel_color(t_all scene, t_ray ray);
 t_figures	*get_last_figure_of_scene(t_all *scene, t_rgb rgb);
-void		parser (t_all *scene, char *filename);
+void		parser (t_all *scene, char *rt_filename);
+void		error(char *message, char *place);
+void		start_bmp(char *rt_filename, char *save, t_all scene, int *picture);
 #endif

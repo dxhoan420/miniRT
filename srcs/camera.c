@@ -13,8 +13,8 @@ void	add_camera(t_all *scene, t_vec point, t_vec normal, float fov)
 	new = malloc(sizeof (t_cameras));
 	if (new == NULL)
 		exit(-666);
-	new->coordinates = point;
-	new->orient_vector = vector_norm(normal);
+	new->point = point;
+	new->orient = vector_norm(normal);
 	new->fov = fov;
 	if (iterator != NULL)
 	{
