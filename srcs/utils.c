@@ -16,7 +16,7 @@ void	error(char *message, char *place)
 char	*get_bmp_name_malloc(char *rt)
 {
 	char	*bmp_filename;
-	size_t	length;
+	int		length;
 
 	bmp_filename = rt;
 	while (*rt)
@@ -27,18 +27,17 @@ char	*get_bmp_name_malloc(char *rt)
 			rt++;
 	}
 	length = 0;
-	while (bmp_filename[length])
-		length++;
-	rt = bmp_filename;
+	while (bmp_filename[length++])
+		;
+	rt -= 3;
 	bmp_filename = malloc(++length);
-	while (!(*rt == '.' && *(rt + 1) == 'r' && *(rt + 2) == 't'))
-		*bmp_filename++ = *rt++;
-	*bmp_filename++ = '.';
-	*bmp_filename++ = 'b';
-	*bmp_filename++ = 'm';
-	*bmp_filename++ = 'p';
-	*bmp_filename++ = '\0';
-	bmp_filename -= length;
+	bmp_filename[--length] = '\0';
+	bmp_filename[--length] = 'p';
+	bmp_filename[--length] = 'm';
+	bmp_filename[--length] = 'b';
+	bmp_filename[--length] = '.';
+	while (length >= 0)
+		bmp_filename[length--] = *rt--;
 	return (bmp_filename);
 }
 
