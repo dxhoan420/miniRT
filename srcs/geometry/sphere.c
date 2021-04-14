@@ -15,7 +15,7 @@ float	distance_to_sphere(t_ray ray, struct s_figure *sphere)
 	nums.x = vecs_dot(ray.dir, ray.dir);
 	nums.y = 2 * (vecs_dot(cam_to_center, ray.dir));
 	nums.z = vecs_dot(cam_to_center, cam_to_center)
-		- (sphere->radius_or_size * sphere->radius_or_size);
+		- (sphere->rad_or_size * sphere->rad_or_size);
 	discriminant = nums.y * nums.y - 4 * nums.z * nums.x;
 	if (discriminant < 0)
 		return (0);
@@ -38,5 +38,5 @@ void	add_sphere(t_all *scene, t_vec center, float diameter, t_rgb rgb)
 	sphere->type = SPHERE;
 	sphere->get_distance = distance_to_sphere;
 	sphere->first = center;
-	sphere->radius_or_size = diameter / 2;
+	sphere->rad_or_size = diameter / 2;
 }

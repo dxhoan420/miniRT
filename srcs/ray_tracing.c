@@ -11,7 +11,7 @@ typedef struct s_viewport
 	float	x_pixel;
 	float	y_pixel;
 	int		mlx_x;
-	int 	mlx_y;
+	int		mlx_y;
 	t_vec	dir;
 }			t_viewport;
 
@@ -27,7 +27,6 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
 	viewport.y_pixel = viewport.y_size / (float) y_resolution;
 	viewport.dir.z = 1;
 	viewport.dir.y = (float)y_resolution / 2 * viewport.y_pixel;
-
 	return (viewport);
 }
 
@@ -56,11 +55,11 @@ void	mlx_or_bmp(t_all scene, t_viewport	viewport, int *picture)
 	ray = create_ray(scene.cameras->point, viewport.dir);
 	color = get_pixel_color(scene, ray);
 	if (!picture)
-		mlx_pixel_put(scene.engine.mlx, scene.engine.win,
-					  viewport.mlx_x, viewport.mlx_y,color);
+		mlx_pixel_put(scene.engine.mlx, scene.engine.win, viewport.mlx_x,
+			viewport.mlx_y, color);
 	else
-		picture[(scene.y_res - viewport.mlx_y) *
-				scene.x_res - (scene.x_res - viewport.mlx_x)] = color;
+		picture[(scene.y_res - viewport.mlx_y) *scene.x_res
+			- (scene.x_res - viewport.mlx_x)] = color;
 }
 
 void	render_scene(t_all scene, int *picture)

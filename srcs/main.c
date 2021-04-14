@@ -47,7 +47,7 @@ int	key_hook(int keycode, t_all *scene)
 	return (keycode);
 }
 
-int has_rt(char *filename)
+int	has_rt(char *filename)
 {
 	while (*filename)
 		filename++;
@@ -76,7 +76,7 @@ int	main (int argc, char **argv)
 		scene.y_res = HEIGHT;
 	scene.engine.mlx = mlx_init();
 	scene.engine.win = mlx_new_window(scene.engine.mlx,
-									scene.x_res, scene.y_res, "miniRT");
+			scene.x_res, scene.y_res, "miniRT");
 	render_scene(scene, NULL);
 	mlx_key_hook(scene.engine.win, key_hook, &scene);
 	mlx_hook(scene.engine.win, 17, 0L, window_close, &scene);

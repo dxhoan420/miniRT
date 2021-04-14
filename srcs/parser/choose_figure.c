@@ -70,6 +70,5 @@ void	set_cylinder(char *string, t_all *scene)
 	string = set_float(string, &height);
 	string = set_rgb(string, &rgb, FIGURE);
 	add_cylinder(scene, create_ray(coordinates, normal),
-					create_vector (diameter, height, 421), rgb);
+		create_vector (diameter, height, 421), rgb);
 }
-

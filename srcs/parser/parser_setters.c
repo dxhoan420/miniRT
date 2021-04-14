@@ -34,9 +34,6 @@ char	*set_rgb(char *string, t_rgb *rgb, t_color_type type)
 {
 	char	*origin;
 	float	ratio;
-	float	r;
-	float	g;
-	float	b;
 
 	origin = string;
 	if (type == LIGHT)
@@ -45,19 +42,17 @@ char	*set_rgb(char *string, t_rgb *rgb, t_color_type type)
 		if (ratio > 1)
 			error("Ratio error", origin);
 	}
-	string = set_float(string, &r);
-	if (r > 255)
+	string = set_float(string, &rgb->r);
+	if (rgb->r > 255)
 		error("Red channel overflow", origin);
-	string = set_float(string, &g);
-	if (g > 255)
+	string = set_float(string, &rgb->g);
+	if (rgb->g > 255)
 		error("Green channel overflow", origin);
-	string = set_float(string, &b);
-	if (b > 255)
+	string = set_float(string, &rgb->b);
+	if (rgb->b > 255)
 		error("Blue channel overflow", origin);
 	if (type == LIGHT)
-		*rgb = create_rgb_norm(r, g, b, ratio);
-	else
-		*rgb = create_rgb(r, g, b);
+		*rgb = create_rgb_norm(rgb->r, rgb->g, rgb->r, ratio);
 	return (string);
 }
 
@@ -86,7 +81,7 @@ char	*check_origin_to_current(char *origin, char *current)
 char	*set_float(char *str, float *result)
 {
 	char	*origin;
-	float   power;
+	float	power;
 	float	positive;
 
 	*result = 0;

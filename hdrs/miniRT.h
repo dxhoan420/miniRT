@@ -38,8 +38,8 @@ typedef enum e_side
 
 typedef struct s_mlx
 {
-	void        *mlx;
-	void        *win;
+	void	*mlx;
+	void	*win;
 }				t_mlx;
 
 typedef struct s_camera
@@ -67,7 +67,7 @@ typedef struct s_figure
 	t_vec			first;
 	t_vec			second;
 	t_vec			third;
-	float			radius_or_size;
+	float			rad_or_size;
 	float			height;
 	t_vec			hit;
 	t_vec			normal;

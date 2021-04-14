@@ -60,4 +60,3 @@ void	set_other(char *string, t_all *scene)
 			return (set_cylinder(string + 2, scene));
 	error("Can't handle this shit", string);
 }
-

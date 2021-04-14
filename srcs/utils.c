@@ -13,19 +13,22 @@ void	error(char *message, char *place)
 	exit(-1);
 }
 
-char *get_bmp_name_malloc(char *rt)
+char	*get_bmp_name_malloc(char *rt)
 {
 	char	*bmp_filename;
 	size_t	length;
 
 	bmp_filename = rt;
 	while (*rt)
+	{
 		if (*rt == '/' && *(rt + 1) != '\0')
 			bmp_filename = ++rt;
 		else
 			rt++;
+	}
 	length = 0;
-	while (bmp_filename[length++]);
+	while (bmp_filename[length])
+		length++;
 	rt = bmp_filename;
 	bmp_filename = malloc(++length);
 	while (!(*rt == '.' && *(rt + 1) == 'r' && *(rt + 2) == 't'))
@@ -39,7 +42,7 @@ char *get_bmp_name_malloc(char *rt)
 	return (bmp_filename);
 }
 
-void put_int_to_header(unsigned char *part, int data)
+void	put_int_to_header(unsigned char *part, int data)
 {
 	part[0] = (unsigned char)(data);
 	part[1] = (unsigned char)(data >> 8);
@@ -72,15 +75,15 @@ void put_int_to_header(unsigned char *part, int data)
 ** 50		| 32	| NB OF INDEX OF COLOR (0 = ALL)
 */
 
-void header_write(int fd, int x_res, int y_res)
+void	header_write(int fd, int x_res, int y_res)
 {
-	int total;
+	int				total;
 	unsigned char	header[FHEADER + BMHEADER];
 
 	total = FHEADER + BMHEADER;
 	while (total-- > 0)
 		header[total] = 0;
-	total = (int)sizeof(int) * x_res * y_res + FHEADER + BMHEADER;
+	total = (int) sizeof(int) * x_res * y_res + FHEADER + BMHEADER;
 	header[0] = (unsigned char)('B');
 	header[1] = (unsigned char)('M');
 	put_int_to_header(header + 2, total);
@@ -96,7 +99,7 @@ void header_write(int fd, int x_res, int y_res)
 	write(fd, header, 54);
 }
 
-void start_bmp_n_exit(char *rt_filename, char *save, t_all scene)
+void	start_bmp_n_exit(char *rt_filename, char *save, t_all scene)
 {
 	int		fd;
 	int		*picture;
@@ -121,4 +124,3 @@ void start_bmp_n_exit(char *rt_filename, char *save, t_all scene)
 	write(fd, picture, scene.x_res * scene.y_res * 4);
 	exit(0);
 }
-
