@@ -7,12 +7,6 @@
 #define FHEADER 14
 #define BMHEADER 40
 
-void	error(char *message, char *place)
-{
-	printf("Error\n%s\nHERE: %s\n", message, place);
-	exit(-1);
-}
-
 char	*get_bmp_name_malloc(char *rt)
 {
 	char	*bmp_filename;

@@ -14,5 +14,4 @@ files=($(find -E ./scenes -type f -regex "^.*$"))
 for item in ${files[*]}
 do
 	./miniRT $item --save
-	#parallel -N0 ./miniRT $item --save
 done

@@ -15,8 +15,8 @@
 # include "vector.h"
 # include "color.h"
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 2560
+# define HEIGHT 1440
 # define SHINE	250
 //100000 minimum for dark scene
 # define SHADOW_NOISE_REDUCTION	100000
@@ -35,12 +35,6 @@ typedef enum e_side
 	INNER,
 	OUTER
 }			t_side;
-
-typedef struct s_mlx
-{
-	void	*mlx;
-	void	*win;
-}				t_mlx;
 
 typedef struct s_camera
 {
@@ -78,13 +72,16 @@ typedef struct s_figure
 
 typedef struct s_all
 {
-	int				x_res;
-	int				y_res;
-	t_rgb			ambient_rgb_norm;
-	t_cameras		*cameras;
-	t_lights		*lights;
-	t_figures		*figures;
-	t_mlx			engine;
+	char		*filename;
+	int			x_res;
+	int			y_res;
+	t_rgb		ambient_rgb_norm;
+	t_cameras	*cameras;
+	t_lights	*lights;
+	t_figures	*figures;
+	void		*mlx;
+	void		*win;
+	float		step_size;
 }				t_all;
 
 void		add_sphere(t_all *scene, t_vec center, float diameter, t_rgb rgb);
@@ -97,7 +94,10 @@ void		add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm);
 void		render_scene(t_all scene, int *picture);
 int			get_pixel_color(t_all scene, t_ray ray);
 t_figures	*get_last_figure_of_scene(t_all *scene, t_rgb rgb);
-void		parser (t_all *scene, char *rt_filename);
+void		parser (t_all *scene);
 void		error(char *message, char *place);
+int			key_hook(int keycode, t_all *scene);
+int			window_close(t_all *scene);
+t_all		init_scene(char *filename);
 void		start_bmp_n_exit(char *rt_filename, char *save, t_all scene);
 #endif

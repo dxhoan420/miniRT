@@ -12,74 +12,73 @@
 
 #include "miniRT.h"
 
-enum e_direction {
-	BACKWARD,
-	FORWARD
-};
-
-int	window_close(t_all *scene)
+char	*check_n_set_filename(int argc, char **argv)
 {
-	mlx_clear_window(scene->engine.mlx, scene->engine.win);
-	mlx_destroy_window(scene->engine.mlx, scene->engine.win);
-	exit(0);
-}
+	char	*filename;
 
-int	change_camera(t_all *scene, enum e_direction direction)
-{
-	if (scene->cameras->next == NULL || scene->cameras->prev == NULL)
-		return (-1);
-	if (direction == FORWARD)
-		scene->cameras = scene->cameras->next;
-	if (direction == BACKWARD)
-		scene->cameras = scene->cameras->prev;
-	render_scene(*scene, NULL);
-	return (direction);
-}
-
-int	key_hook(int keycode, t_all *scene)
-{
-	if (keycode == 53)
-		window_close(scene);
-	if (keycode == 124 || keycode == 125)
-		return (change_camera(scene, FORWARD));
-	if (keycode == 123 || keycode == 126)
-		return (change_camera(scene, BACKWARD));
-	return (keycode);
-}
-
-int	has_rt(char *filename)
-{
+	if (argc < 2)
+	{
+		printf("Need *.rt file in first argument for successful launch");
+		exit (-1);
+	}
+	filename = argv[1];
 	while (*filename)
 		filename++;
 	if (*--filename == 't')
 		if (*--filename == 'r')
 			if (*--filename == '.')
 				if (*--filename != '\0')
-					return (1);
-	return (0);
+					return (argv[1]);
+	error("WRONG FILE EXTENSION: need *.rt files", argv[1]);
+	return (NULL);
 }
 
 int	main (int argc, char **argv)
 {
 	t_all		scene;
 
-	if (argc < 2)
-		return (0);
-	if (!has_rt(argv[1]))
-		error("WRONG FILE EXTENSION: need *.rt files", argv[1]);
-	parser(&scene, argv[1]);
+	scene = init_scene(check_n_set_filename(argc, argv));
+	parser(&scene);
 	if (argc > 2)
 		start_bmp_n_exit(argv[1], argv[2], scene);
 	if (scene.x_res > WIDTH)
 		scene.x_res = WIDTH;
 	if (scene.y_res > HEIGHT)
 		scene.y_res = HEIGHT;
-	scene.engine.mlx = mlx_init();
-	scene.engine.win = mlx_new_window(scene.engine.mlx,
+	scene.mlx = mlx_init();
+	scene.win = mlx_new_window(scene.mlx,
 			scene.x_res, scene.y_res, "miniRT");
 	render_scene(scene, NULL);
-	mlx_key_hook(scene.engine.win, key_hook, &scene);
-	mlx_hook(scene.engine.win, 17, 0L, window_close, &scene);
-	mlx_loop(scene.engine.mlx);
+	mlx_key_hook(scene.win, key_hook, &scene);
+	mlx_hook(scene.win, 17, 0L, window_close, &scene);
+	mlx_loop(scene.mlx);
 	return (0);
+}
+
+int	window_close(t_all *scene)
+{
+	mlx_clear_window(scene->mlx, scene->win);
+	mlx_destroy_window(scene->mlx, scene->win);
+	exit(0);
+}
+
+void	error(char *message, char *place)
+{
+	printf("Error\n%s\nHERE: %s\n", message, place);
+	exit(-1);
+}
+
+t_all	init_scene(char *filename)
+{
+	t_all	scene;
+
+	scene.filename = filename;
+	scene.x_res = -1;
+	scene.y_res = -1;
+	scene.ambient_rgb_norm = create_rgb_norm(0, 0, 0, 0);
+	scene.cameras = NULL;
+	scene.lights = NULL;
+	scene.figures = NULL;
+	scene.step_size = 1;
+	return (scene);
 }

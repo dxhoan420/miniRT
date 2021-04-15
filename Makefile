@@ -12,8 +12,9 @@
 
 NAME	= miniRT
 
-SRCS	= $(addprefix srcs/, main.c camera.c ray_tracing.c color.c utils.c\
-							get_pixel_color.c get_figure.c $(GEOMETRY) $(PARSER))
+SRCS	= $(addprefix srcs/, main.c camera.c ray_tracing.c color.c bmp.c\
+							get_pixel_color.c get_figure.c key_hooks.c\
+							$(GEOMETRY) $(PARSER))
 
 PARSER	= $(addprefix parser/, get_next_line.c get_next_line_utils.c parser.c\
 								choose_type.c choose_figure.c parser_setters.c)

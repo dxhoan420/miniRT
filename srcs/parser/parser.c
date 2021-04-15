@@ -9,13 +9,15 @@ void	set_screen_resolution(char *string, t_all *scene)
 	float	temp;
 	char	*origin;
 
+	if (scene->x_res != -1 || scene->y_res != -1)
+		return ;
 	origin = string;
 	string = set_float(string, &temp);
 	scene->x_res = (int)temp;
 	string = set_float(string, &temp);
 	scene->y_res = (int)temp;
 	if (scene->x_res <= 0 || scene->y_res <= 0)
-		error("Negative resolution: need positive number", origin);
+		error("Negative resolution: need positive integer", origin);
 	if (scene->x_res > 16384 || scene->y_res > 16384)
 		error("Maximum allowed size is 16384", origin);
 }
@@ -53,7 +55,7 @@ void	type_check(t_all *scene, char *string, char *a_r_checks)
 		set_other(string, scene);
 }
 
-void	parser (t_all *scene, char *rt_filename)
+void	parser (t_all *scene)
 {
 	int		fd;
 	int		have_found_new_line;
@@ -63,9 +65,9 @@ void	parser (t_all *scene, char *rt_filename)
 	a_r_checks[0] = '2';
 	a_r_checks[1] = '1';
 	a_r_checks[2] = '\0';
-	fd = open(rt_filename, O_RDONLY);
+	fd = open(scene->filename, O_RDONLY);
 	if (fd == -1)
-		error("Can't open file for read", rt_filename);
+		error("Can't open file for read", scene->filename);
 	have_found_new_line = get_next_line(fd, &string);
 	while (have_found_new_line)
 	{
@@ -76,6 +78,6 @@ void	parser (t_all *scene, char *rt_filename)
 	type_check(scene, string, a_r_checks);
 	free(string);
 	if (a_r_checks[1] == '2' || a_r_checks[2] == '1')
-		error("No lines starting with A or R", rt_filename);
+		error("No lines starting with A or R", scene->filename);
 	close(fd);
 }

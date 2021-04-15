@@ -55,7 +55,7 @@ void	mlx_or_bmp(t_all scene, t_viewport	viewport, int *picture)
 	ray = create_ray(scene.cameras->point, viewport.dir);
 	color = get_pixel_color(scene, ray);
 	if (!picture)
-		mlx_pixel_put(scene.engine.mlx, scene.engine.win, viewport.mlx_x,
+		mlx_pixel_put(scene.mlx, scene.win, viewport.mlx_x,
 			viewport.mlx_y, color);
 	else
 		picture[(scene.y_res - viewport.mlx_y) *scene.x_res
