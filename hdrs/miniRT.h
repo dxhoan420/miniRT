@@ -20,6 +20,7 @@
 # define SHINE	250
 //100000 minimum for dark scene
 # define SHADOW_NOISE_REDUCTION	100000
+# define PROGRESS_BAR_SCALE	50
 
 typedef enum e_type
 {

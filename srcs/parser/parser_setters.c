@@ -52,7 +52,7 @@ char	*set_rgb(char *string, t_rgb *rgb, t_color_type type)
 	if (rgb->b > 255)
 		error("Blue channel overflow", origin);
 	if (type == LIGHT)
-		*rgb = create_rgb_norm(rgb->r, rgb->g, rgb->r, ratio);
+		*rgb = create_rgb_norm(rgb->r, rgb->g, rgb->b, ratio);
 	return (string);
 }
 

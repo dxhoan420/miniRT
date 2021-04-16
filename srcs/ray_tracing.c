@@ -19,6 +19,7 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
 {
 	t_viewport	viewport;
 	float		ratio;
+	int			counter;
 
 	ratio = (float) x_resolution / (float) y_resolution;
 	viewport.x_size = (float)(2 * tan(fov / 2 / 180 * M_PI));
@@ -27,6 +28,11 @@ t_viewport	get_viewport(int x_resolution, int y_resolution, float fov)
 	viewport.y_pixel = viewport.y_size / (float) y_resolution;
 	viewport.dir.z = 1;
 	viewport.dir.y = (float)y_resolution / 2 * viewport.y_pixel;
+	printf("RENDERING IN PROGRESS!\n|");
+	counter = y_resolution / PROGRESS_BAR_SCALE;
+	while (counter--)
+		printf("^");
+	printf("|\n");
 	return (viewport);
 }
 
@@ -68,6 +74,7 @@ void	render_scene(t_all scene, int *picture)
 
 	viewport = get_viewport(scene.x_res, scene.y_res, scene.cameras->fov);
 	viewport.mlx_y = 0;
+	printf("|");
 	while (viewport.mlx_y < scene.y_res)
 	{
 		viewport.dir.x = (-(float)scene.x_res / 2) * viewport.x_pixel;
@@ -80,5 +87,8 @@ void	render_scene(t_all scene, int *picture)
 		}
 		viewport.dir.y -= viewport.y_pixel;
 		viewport.mlx_y++;
+		if (viewport.mlx_y % PROGRESS_BAR_SCALE == 0)
+			printf("#");
 	}
+	printf("|\n");
 }

@@ -7,8 +7,8 @@
 #define SS_MIN 0.25f
 
 enum e_direction {
-	PREV = 43,
-	NEXT = 47
+	PREV = 123,
+	NEXT
 };
 
 enum e_scale {
@@ -39,6 +39,8 @@ int	change_camera(t_all *scene, enum e_direction direction)
 	if (direction == PREV)
 		scene->cameras = scene->cameras->prev;
 	render_scene(*scene, NULL);
+	printf("Current coordinate: %f,%f,%f\n", scene->cameras->point.x,
+		   scene->cameras->point.y, scene->cameras->point.z);
 	return (direction);
 }
 
@@ -63,6 +65,7 @@ int	change_fov(t_all *scene, enum e_scale scale)
 		return (scale);
 	}
 	render_scene(*scene, NULL);
+	printf("Current FOV: %f\n", scene->cameras->fov);
 	return (scale);
 }
 
@@ -102,6 +105,8 @@ int	change_point_of_camera(t_all *scene, enum e_wasd wasd)
 	if (wasd == DOWN)
 		scene->cameras->point.y -= scene->step_size;
 	render_scene(*scene, NULL);
+	printf("Current coordinate: %f,%f,%f\n", scene->cameras->point.x,
+		   scene->cameras->point.y, scene->cameras->point.z);
 	return (wasd);
 }
 
