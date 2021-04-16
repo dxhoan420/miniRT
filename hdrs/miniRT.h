@@ -5,12 +5,13 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# include <mlx.h>
+# include "mlx.h"
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
 # include <float.h>
 # include <fcntl.h>
+# include <unistd.h>
 
 # include "vector.h"
 # include "color.h"
@@ -18,7 +19,7 @@
 # define WIDTH 2560
 # define HEIGHT 1440
 # define SHINE	250
-//100000 minimum for dark scene
+//Set next macro 100000 minimum for dark scene
 # define SHADOW_NOISE_REDUCTION	100000
 # define PROGRESS_BAR_SCALE	50
 
@@ -85,13 +86,6 @@ typedef struct s_all
 	float		step_size;
 }				t_all;
 
-void		add_sphere(t_all *scene, t_vec center, float diameter, t_rgb rgb);
-void		add_plane(t_all *scene, t_vec point, t_vec norm, t_rgb rgb);
-void		add_triangle(t_all *scene, t_vec one, t_ray two_three, t_rgb rgb);
-void		add_square(t_all *scene, t_ray cntr_n_nrm, float size, t_rgb rgb);
-void		add_cylinder(t_all *scene, t_ray one_two, t_vec d_n_h, t_rgb rgb);
-void		add_camera(t_all *scene, t_vec point, t_vec normal, float fov);
-void		add_light(t_all *scene, t_vec coordinates, t_rgb rgb_norm);
 void		render_scene(t_all scene, int *picture);
 int			get_pixel_color(t_all scene, t_ray ray);
 t_figures	*get_last_figure_of_scene(t_all *scene, t_rgb rgb);

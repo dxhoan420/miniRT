@@ -74,7 +74,7 @@ void	render_scene(t_all scene, int *picture)
 
 	viewport = get_viewport(scene.x_res, scene.y_res, scene.cameras->fov);
 	viewport.mlx_y = 0;
-	printf("|");
+	write(1, "|", 1);
 	while (viewport.mlx_y < scene.y_res)
 	{
 		viewport.dir.x = (-(float)scene.x_res / 2) * viewport.x_pixel;
@@ -88,7 +88,7 @@ void	render_scene(t_all scene, int *picture)
 		viewport.dir.y -= viewport.y_pixel;
 		viewport.mlx_y++;
 		if (viewport.mlx_y % PROGRESS_BAR_SCALE == 0)
-			printf("#");
+			write(1, "#", 1);
 	}
-	printf("|\n");
+	write(1, "|\n", 2);
 }

@@ -31,9 +31,10 @@ LIBS	= -lmlx -framework OpenGL -framework AppKit
 
 all		: $(NAME)
 
-CFLAGS =  -I./hdrs -Wall -Wextra -Werror -g ## убрать это -gовно
+CFLAGS =  -I./hdrs -I./mlx -Wall -Wextra -Werror -g ## убрать это -gовно
 
 $(NAME)	: $(OBJS) $(HDRS)
+	make -C mlx
 	$(CC) -o $(NAME) $(OBJS) $(LIBS)
 
 clean	:
