@@ -5,7 +5,7 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# include "mlx.h"
+# include <mlx.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
@@ -16,8 +16,6 @@
 # include "vector.h"
 # include "color.h"
 
-# define WIDTH 2560
-# define HEIGHT 1440
 # define SHINE	250
 //Set next macro 100000 minimum for dark scene
 # define SHADOW_NOISE_REDUCTION	100000
@@ -95,4 +93,5 @@ int			key_hook(int keycode, t_all *scene);
 int			window_close(t_all *scene);
 t_all		init_scene(char *filename);
 void		start_bmp_n_exit(char *rt_filename, char *save, t_all scene);
+void		mlx_get_screen_size(int *width, int *height);
 #endif

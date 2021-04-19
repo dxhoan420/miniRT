@@ -36,15 +36,18 @@ char	*check_n_set_filename(int argc, char **argv)
 int	main (int argc, char **argv)
 {
 	t_all		scene;
+	int			width;
+	int			height;
 
 	scene = init_scene(check_n_set_filename(argc, argv));
 	parser(&scene);
 	if (argc > 2)
 		start_bmp_n_exit(argv[1], argv[2], scene);
-	if (scene.x_res > WIDTH)
-		scene.x_res = WIDTH;
-	if (scene.y_res > HEIGHT)
-		scene.y_res = HEIGHT;
+	mlx_get_screen_size(&width, &height);
+	if (scene.x_res > width)
+		scene.x_res = width;
+	if (scene.y_res > height)
+		scene.y_res = height;
 	scene.mlx = mlx_init();
 	scene.win = mlx_new_window(scene.mlx,
 			scene.x_res, scene.y_res, "miniRT");

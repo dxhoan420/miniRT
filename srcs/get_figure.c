@@ -10,7 +10,7 @@ t_vec	get_cylinder_normal(struct s_figure cylinder)
 
 	m = vecs_subtraction(cylinder.hit, cylinder.first);
 	return (vector_norm(vecs_subtraction(m, vec_multi(cylinder.second,
-						vecs_dot(cylinder.second, m)))));
+					vecs_dot(cylinder.second, m)))));
 }
 
 void	set_values(struct s_figure *figure, float dist, t_ray ray)

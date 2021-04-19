@@ -29,16 +29,20 @@ OBJS	= $(SRCS:.c=.o)
 
 LIBS	= -lmlx -framework OpenGL -framework AppKit
 
+MLX		= srcs/mlx_get_screen_size.m
+
+OBJM	= $(MLX:.m =.o)
+
+%.o: %.c
+	$(CC) -g -Wall -Wextra -Werror -I./hdrs -c $< -o $@
+
 all		: $(NAME)
 
-CFLAGS =  -I./hdrs -I./mlx -Wall -Wextra -Werror -g ## убрать это -gовно
-
-$(NAME)	: $(OBJS) $(HDRS)
-	make -C mlx
-	$(CC) -o $(NAME) $(OBJS) $(LIBS)
+$(NAME)	: $(HDRS) $(OBJS) $(OBJM)
+	$(CC) -o $(NAME) $(OBJS) $(OBJM) $(LIBS)
 
 clean	:
-	rm -f $(OBJS)
+	rm -f $(OBJS) mlx_get_screen_size.o
 
 fclean	: clean
 	rm -f $(NAME)

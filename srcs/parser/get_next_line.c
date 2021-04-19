@@ -33,12 +33,11 @@ int	get_next_line(int fd, char **line)
 	len = read(fd, buffer, BUFFER_SIZE);
 	while (len)
 	{
-		if (len == ERROR)
-			return (ERROR);
 		buffer[len] = '\0';
 		have_nl = buff_n_line_init(&buffer, line);
 		if (have_nl != END_OF_BUFFER)
 			return (have_nl);
+		len = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
 	buffer = NULL;
