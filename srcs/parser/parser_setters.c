@@ -41,14 +41,20 @@ char	*set_rgb(char *string, t_rgb *rgb)
 	string = set_float(string, &rgb->r);
 	if (rgb->r > 255)
 		error("Red channel overflow", origin);
+	if (rgb->r < 0)
+		error("Red channel negative", origin);
 	skip_space_comma(&string);
 	string = set_float(string, &rgb->g);
 	if (rgb->g > 255)
 		error("Green channel overflow", origin);
+	if (rgb->g < 0)
+		error("Green channel negative", origin);
 	skip_space_comma(&string);
 	string = set_float(string, &rgb->b);
 	if (rgb->b > 255)
 		error("Blue channel overflow", origin);
+	if (rgb->b < 0)
+		error("Blue channel negative", origin);
 	if (*string != '\0')
 		error("Extra symbols after RGB", origin);
 	return (string);

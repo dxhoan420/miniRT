@@ -40,11 +40,11 @@ int	skip_space_comma(char **string)
 		return (1);
 	}
 	else
-		error("Need comma for separation in vector", *string);
+		error("Separation problem", *string);
 	return (0);
 }
 
-int skip_space(char **string)
+int	skip_space(char **string)
 {
 	char	*line;
 

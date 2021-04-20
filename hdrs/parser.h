@@ -14,7 +14,7 @@ typedef enum e_vector_type
 	NORMAL
 }			t_vector_type;
 
-typedef struct	s_checker
+typedef struct s_checker
 {
 	int		line_counter;
 	char	letter_a;

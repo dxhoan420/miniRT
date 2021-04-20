@@ -12,10 +12,9 @@ void	parse_light(t_all *scene, char *string)
 	char	*origin;
 
 	origin = string;
-
 	string = set_vector(string, &coordinates, POINT);
 	string = set_float(string, &ratio);
-	if (ratio > 1)
+	if (ratio > 1 || ratio < 0)
 		error("Ratio error", origin);
 	set_rgb(string, &rgb);
 	rgb = create_rgb_norm(rgb.r, rgb.g, rgb.b, ratio);
@@ -79,7 +78,7 @@ void	parse_ambient(t_all *scene, char *string, t_count *checks)
 		checks->letter_a = 'A';
 	origin = string;
 	string = set_float(string, &ratio);
-	if (ratio > 1)
+	if (ratio > 1 || ratio < 0)
 		error("Ratio error", origin);
 	skip_space(&string);
 	string = set_rgb(string, &rgb);

@@ -28,7 +28,6 @@ void	type_check(t_all *scene, char *line, t_count *checks)
 		parse_triangle(scene, line);
 	else
 		error("Can't handle. Undefined identifier.", line);
-
 }
 
 void	parser (t_all *scene)
