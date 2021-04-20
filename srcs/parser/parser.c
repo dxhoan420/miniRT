@@ -4,80 +4,57 @@
 
 #include "parser.h"
 
-void	set_screen_resolution(char *string, t_all *scene)
+void	type_check(t_all *scene, char *line, t_count *checks)
 {
-	float	temp;
-	char	*origin;
-
-	if (scene->x_res != -1 || scene->y_res != -1)
+	if (*line == '#' || *line == '\0')
 		return ;
-	origin = string;
-	string = set_float(string, &temp);
-	scene->x_res = (int)temp;
-	string = set_float(string, &temp);
-	scene->y_res = (int)temp;
-	if (scene->x_res <= 0 || scene->y_res <= 0)
-		error("Negative resolution: need positive integer", origin);
-	if (scene->x_res > 16384 || scene->y_res > 16384)
-		error("Maximum allowed size is 16384", origin);
-}
-
-void	set_ambient(char *string, t_all *scene)
-{
-	t_rgb	rgb_norm;
-
-	string = set_rgb(string, &rgb_norm, LIGHT);
-	scene->ambient_rgb_norm = rgb_norm;
-}
-
-void	type_check(t_all *scene, char *string, char *a_r_checks)
-{
-	if (*string == '#' || *string == '\0')
-		return ;
-	if (*string == 'R')
-	{
-		if (a_r_checks[1] == *string)
-			error("Lines starting with R must appear once", string);
-		a_r_checks[1] = 'R';
-		set_screen_resolution(string + 1, scene);
-	}
-	else if (*string == 'A')
-	{
-		if (a_r_checks[0] == *string)
-			error("Lines starting with A must appear once", string);
-		a_r_checks[0] = 'A';
-		set_ambient(string + 1, scene);
-	}
-	else if (*string == 'c' && ((*(string + 1) >= '\t' && *(string + 1) <= '\r')
-			|| *(string + 1) == ' '))
-		set_camera(string + 1, scene);
+	if (is_start(&line, 'R', '\0'))
+		parse_screen_resolution(scene, line, checks);
+	else if (is_start(&line, 'A', '\0'))
+		parse_ambient(scene, line, checks);
+	else if (is_start(&line, 'c', '\0'))
+		parse_camera(scene, line);
+	else if (is_start(&line, 'l', '\0'))
+		parse_light(scene, line);
+	else if (is_start(&line, 's', 'p'))
+		parse_sphere(scene, line);
+	else if (is_start(&line, 'p', 'l'))
+		parse_plane(scene, line);
+	else if (is_start(&line, 's', 'q'))
+		parse_square(scene, line);
+	else if (is_start(&line, 'c', 'y'))
+		parse_cylinder(scene, line);
+	else if (is_start(&line, 't', 'r'))
+		parse_triangle(scene, line);
 	else
-		set_other(string, scene);
+		error("Can't handle. Undefined identifier.", line);
+
 }
 
 void	parser (t_all *scene)
 {
 	int		fd;
-	int		have_found_new_line;
-	char	*string;
-	char	a_r_checks[3];
+	int		have_new_line;
+	char	*line;
+	t_count	checks;
 
-	a_r_checks[0] = '2';
-	a_r_checks[1] = '1';
-	a_r_checks[2] = '\0';
+	checks.letter_a = '\0';
+	checks.letter_r = '\0';
+	checks.line_counter = 1;
 	fd = open(scene->filename, O_RDONLY);
 	if (fd == -1)
 		error("Can't open file for read", scene->filename);
-	have_found_new_line = get_next_line(fd, &string);
-	while (have_found_new_line)
+	have_new_line = get_next_line(fd, &line);
+	while (have_new_line)
 	{
-		type_check(scene, string, a_r_checks);
-		free(string);
-		have_found_new_line = get_next_line(fd, &string);
+		type_check(scene, line, &checks);
+		free(line);
+		have_new_line = get_next_line(fd, &line);
+		checks.line_counter++;
 	}
-	type_check(scene, string, a_r_checks);
-	free(string);
-	if (a_r_checks[1] == '2' || a_r_checks[2] == '1')
+	type_check(scene, line, &checks);
+	free(line);
+	if (checks.letter_a == '\0' || checks.letter_r == '\0')
 		error("No lines starting with A or R", scene->filename);
 	close(fd);
 }

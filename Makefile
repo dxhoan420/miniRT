@@ -17,7 +17,8 @@ SRCS	= $(addprefix srcs/, main.c camera.c ray_tracing.c color.c bmp.c\
 							$(GEOMETRY) $(PARSER))
 
 PARSER	= $(addprefix parser/, get_next_line.c get_next_line_utils.c parser.c\
-								choose_type.c choose_figure.c parser_setters.c)
+								parse_other.c parse_figure.c parser_setters.c\
+								parser_utils.c)
 
 GEOMETRY= $(addprefix geometry/, vector.c vectors_operation.c sphere.c plane.c\
 								triangle.c cylinder.c)

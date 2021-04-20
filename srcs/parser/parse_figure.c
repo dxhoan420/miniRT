@@ -4,7 +4,7 @@
 
 #include "parser.h"
 
-void	set_sphere(char *string, t_all *scene)
+void	parse_sphere(t_all *scene, char *string)
 {
 	t_vec	coordinates;
 	float	diameter;
@@ -12,11 +12,11 @@ void	set_sphere(char *string, t_all *scene)
 
 	string = set_vector(string, &coordinates, POINT);
 	string = set_float(string, &diameter);
-	string = set_rgb(string, &rgb, FIGURE);
+	set_rgb(string, &rgb);
 	add_sphere(scene, coordinates, diameter, rgb);
 }
 
-void	set_plane(char *string, t_all *scene)
+void	parse_plane(t_all *scene, char *string)
 {
 	t_vec	coordinates;
 	t_vec	normal;
@@ -24,11 +24,11 @@ void	set_plane(char *string, t_all *scene)
 
 	string = set_vector(string, &coordinates, POINT);
 	string = set_vector(string, &normal, NORMAL);
-	string = set_rgb(string, &rgb, FIGURE);
+	set_rgb(string, &rgb);
 	add_plane(scene, coordinates, normal, rgb);
 }
 
-void	set_triangle(char *string, t_all *scene)
+void	parse_triangle(t_all *scene, char *string)
 {
 	t_vec	first;
 	t_vec	second;
@@ -38,11 +38,11 @@ void	set_triangle(char *string, t_all *scene)
 	string = set_vector(string, &first, POINT);
 	string = set_vector(string, &second, POINT);
 	string = set_vector(string, &third, POINT);
-	string = set_rgb(string, &rgb, FIGURE);
+	set_rgb(string, &rgb);
 	add_triangle(scene, first, create_ray(second, third), rgb);
 }
 
-void	set_square(char *string, t_all *scene)
+void	parse_square(t_all *scene, char *string)
 {
 	t_vec	coordinates;
 	t_vec	normal;
@@ -52,11 +52,11 @@ void	set_square(char *string, t_all *scene)
 	string = set_vector(string, &coordinates, POINT);
 	string = set_vector(string, &normal, NORMAL);
 	string = set_float(string, &size);
-	string = set_rgb(string, &rgb, FIGURE);
+	set_rgb(string, &rgb);
 	add_square(scene, create_ray(coordinates, normal), size, rgb);
 }
 
-void	set_cylinder(char *string, t_all *scene)
+void	parse_cylinder(t_all *scene, char *string)
 {
 	t_vec	coordinates;
 	t_vec	normal;
@@ -68,7 +68,7 @@ void	set_cylinder(char *string, t_all *scene)
 	string = set_vector(string, &normal, NORMAL);
 	string = set_float(string, &diameter);
 	string = set_float(string, &height);
-	string = set_rgb(string, &rgb, FIGURE);
+	set_rgb(string, &rgb);
 	add_cylinder(scene, create_ray(coordinates, normal),
 		create_vector (diameter, height, 421), rgb);
 }
