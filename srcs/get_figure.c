@@ -4,13 +4,28 @@
 
 #include "get_pixel_color.h"
 
-t_vec	get_cylinder_normal(struct s_figure cylinder)
+t_vec	get_normal(struct s_figure figure)
 {
-	t_vec	m;
+	t_vec			m;
+	t_vec			normal;
+	struct s_figure	cylinder;
+	struct s_figure	triangle;
 
-	m = vecs_subtraction(cylinder.hit, cylinder.first);
-	return (vector_norm(vecs_subtraction(m, vec_multi(cylinder.second,
-					vecs_dot(cylinder.second, m)))));
+	if (figure.type == CYLINDER)
+	{
+		cylinder = figure;
+		m = vecs_subtraction(cylinder.hit, cylinder.first);
+		normal = vector_norm(vecs_subtraction(m, vec_multi(cylinder.second,
+								   vecs_dot(cylinder.second, m))));
+	}
+	if (figure.type == TRIANGLE)
+	{
+		triangle = figure;
+		normal = vector_norm(vecs_cross(
+				vecs_subtraction(triangle.second, triangle.first),
+				vecs_subtraction(triangle.third, triangle.first)));
+	}
+	return (normal);
 }
 
 void	set_values(struct s_figure *figure, float dist, t_ray ray)
@@ -29,17 +44,14 @@ void	set_values(struct s_figure *figure, float dist, t_ray ray)
 	}
 	if (figure->type == TRIANGLE || figure->type == CYLINDER)
 	{
-		if (figure->type == CYLINDER)
-			normal = get_cylinder_normal(*figure);
-		else
-			normal = vector_norm(vecs_cross(
-						vecs_subtraction(figure->second, figure->first),
-						vecs_subtraction(figure->third, figure->first)));
+		normal = get_normal(*figure);
 		if (vecs_dot(ray.dir, normal) > 0)
 			figure->normal = vec_multi(normal, -1);
 		else
 			figure->normal = normal;
 	}
+	if (figure->type == SQUARE && vecs_dot(ray.dir, figure->normal) > 0)
+		figure->normal = vec_multi(figure->normal, -1);
 }
 
 struct s_figure	*get_figure(t_ray ray, t_figures *figures, int first_or_closer)

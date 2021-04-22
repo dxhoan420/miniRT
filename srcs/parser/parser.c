@@ -32,6 +32,8 @@ void	type_check(t_all *scene, char *line, t_count *checks)
 
 void	scene_check(t_all *scene, t_count checks)
 {
+	if (scene->cameras == NULL)
+		error("No cameras in configuration", scene->filename);
 	if (checks.letter_r == '\0')
 	{
 		mlx_get_screen_size(&scene->x_res, &scene->y_res);
@@ -43,8 +45,6 @@ void	scene_check(t_all *scene, t_count checks)
 			 scene->filename);
 	if (scene->x_res < 1 || scene->y_res < 1)
 		error("Resolution Error", scene->filename);
-	if (scene->cameras == NULL)
-		error("No cameras in configuration", scene->filename);
 }
 
 void	parser (t_all *scene)
