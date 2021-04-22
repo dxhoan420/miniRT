@@ -115,5 +115,6 @@ void	start_bmp_n_exit(char *rt_filename, char *save, t_all scene)
 	render_scene(scene, picture);
 	header_write(fd, scene.x_res, scene.y_res);
 	write(fd, picture, scene.x_res * scene.y_res * 4);
+	free(picture);
 	exit(0);
 }

@@ -51,11 +51,14 @@ int	main (int argc, char **argv)
 	scene.mlx = mlx_init();
 	scene.win = mlx_new_window(scene.mlx,
 			scene.x_res, scene.y_res, "miniRT");
+	if (scene.mlx == NULL || scene.win == NULL)
+		error("MLX ERROR", "miniRT Window");
 	render_scene(scene, NULL);
 	mlx_key_hook(scene.win, key_hook, &scene);
 	mlx_hook(scene.win, 17, 0L, window_close, &scene);
 	mlx_loop(scene.mlx);
-	return (0);
+	mlx_destroy_window(scene.mlx, scene.win);
+	exit(0);
 }
 
 int	window_close(t_all *scene)

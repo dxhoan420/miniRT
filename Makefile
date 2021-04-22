@@ -17,8 +17,8 @@ SRCS	= $(addprefix srcs/, main.c camera.c ray_tracing.c color.c bmp.c\
 							$(GEOMETRY) $(PARSER))
 
 PARSER	= $(addprefix parser/, get_next_line.c get_next_line_utils.c parser.c\
-								parse_other.c parse_figure.c parser_setters.c\
-								parser_utils.c)
+								parse_figure.c parser_setters.c\
+								parser_utils.c parse_other.c)
 
 GEOMETRY= $(addprefix geometry/, vector.c vectors_operation.c sphere.c plane.c\
 								triangle.c cylinder.c)
@@ -32,18 +32,18 @@ LIBS	= -lmlx -framework OpenGL -framework AppKit
 
 MLX		= srcs/mlx_get_screen_size.m
 
-OBJM	= $(MLX:.m =.o)
-
 %.o: %.c
 	$(CC) -g -Wall -Wextra -Werror -I./hdrs -c $< -o $@
 
+bonus	: all
+
 all		: $(NAME)
 
-$(NAME)	: $(HDRS) $(OBJS) $(OBJM)
-	$(CC) -o $(NAME) $(OBJS) $(OBJM) $(LIBS)
+$(NAME)	: $(HDRS) $(OBJS) $(MLX)
+	$(CC) -o $(NAME) $(OBJS) $(MLX) $(LIBS)
 
 clean	:
-	rm -f $(OBJS) mlx_get_screen_size.o
+	rm -f $(OBJS)
 
 fclean	: clean
 	rm -f $(NAME)

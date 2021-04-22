@@ -49,7 +49,7 @@ void	parse_screen_resolution(t_all *scene, char *string, t_count *checks)
 	char	*origin;
 
 	if (checks->letter_r == 'R')
-		error("Lines starting with R must appear once", string);
+		error("Line starting with R can be declared only once", string);
 	else
 		checks->letter_r = 'R';
 	origin = string;
@@ -73,7 +73,7 @@ void	parse_ambient(t_all *scene, char *string, t_count *checks)
 	char	*origin;
 
 	if (checks->letter_a == 'A')
-		error("Lines starting with A must appear once", string);
+		error("Lines starting with A can be declared only once", string);
 	else
 		checks->letter_a = 'A';
 	origin = string;

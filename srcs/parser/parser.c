@@ -30,6 +30,23 @@ void	type_check(t_all *scene, char *line, t_count *checks)
 		error("Can't handle. Undefined identifier.", line);
 }
 
+void	scene_check(t_all *scene, t_count checks)
+{
+	if (checks.letter_r == '\0')
+	{
+		mlx_get_screen_size(&scene->x_res, &scene->y_res);
+		printf("R-line wasn't detect in %s. Will use %ix%i\n",
+			scene->filename, scene->x_res, scene->y_res);
+	}
+	if (checks.letter_a == '\0')
+		printf("A-line wasn't detect in %s. Will use default A 0 0,0,0\n",
+			 scene->filename);
+	if (scene->x_res < 1 || scene->y_res < 1)
+		error("Resolution Error", scene->filename);
+	if (scene->cameras == NULL)
+		error("No cameras in configuration", scene->filename);
+}
+
 void	parser (t_all *scene)
 {
 	int		fd;
@@ -53,7 +70,6 @@ void	parser (t_all *scene)
 	}
 	type_check(scene, line, &checks);
 	free(line);
-	if (checks.letter_a == '\0' || checks.letter_r == '\0')
-		error("No lines starting with A or R", scene->filename);
+	scene_check(scene, checks);
 	close(fd);
 }
